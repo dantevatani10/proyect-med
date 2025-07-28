@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Landing from './pages/Landing'
 import Login from './pages/Login'
 import DashboardAdmin from './pages/DashboardAdmin'
 import DashboardMedico from './pages/DashboardMedico'
@@ -14,8 +15,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Ruta pública */}
-        <Route path="/" element={<Login />} />
+        {/* Rutas públicas */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
 
         {/* Rutas protegidas para admin */}
         <Route
