@@ -4,7 +4,7 @@ import DashboardAdmin from './pages/DashboardAdmin'
 import DashboardMedico from './pages/DashboardMedico'
 import Pacientes from './pages/Pacientes'
 import AgregarPaciente from './pages/AgregarPaciente'
-import ProtectedRoute from './routes/ProtectedRoute' // <-- IMPORTADO
+import ProtectedRoute from './routes/ProtectedRoute' // IMPORTADO Y APLICADO
 
 export default function App() {
   return (
@@ -13,7 +13,7 @@ export default function App() {
         {/* Ruta Pública */}
         <Route path="/" element={<Login />} />
 
-        {/* Rutas de Admin */}
+        {/* Rutas Protegidas de Admin */}
         <Route
           path="/dashboard-admin"
           element={
@@ -39,7 +39,7 @@ export default function App() {
           }
         />
 
-        {/* Rutas de Médico */}
+        {/* Ruta Protegida de Médico */}
         <Route
           path="/dashboard-medico"
           element={

@@ -3,7 +3,7 @@ import { create } from 'zustand'
 export type Rol = 'admin' | 'medico'
 
 type User = {
-  email: string // <-- CORREGIDO: Se usa email en lugar de nombre para consistencia.
+  email: string // CORREGIDO: Se usa email para consistencia con el login.
   rol: Rol
 }
 
