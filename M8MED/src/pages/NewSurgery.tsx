@@ -41,7 +41,8 @@ export default function NewSurgery() {
       ...form,
       paciente,
     })
-    navigate('/admin')
+    alert('Cirugía guardada correctamente')
+    navigate('/dashboard-admin')
   }
 
   return (
