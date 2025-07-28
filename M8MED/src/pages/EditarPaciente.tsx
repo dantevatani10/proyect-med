@@ -1,17 +1,19 @@
-import { useNavigate, useParams } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import FormPaciente from '../components/FormPaciente'
-import { usePacienteStore } from '../store/usePacienteStore'
+import { useNavigate, useParams } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import FormPaciente from '../components/FormPaciente';
+import { usePacienteStore } from '../store/usePacienteStore';
 
 export default function EditarPaciente() {
-  const navigate = useNavigate()
-  const { id } = useParams()
-  const paciente = usePacienteStore((s) => s.pacientes.find((p) => p.id === id))
-  const eliminarPaciente = usePacienteStore((s) => s.eliminarPaciente)
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const paciente = usePacienteStore((s) =>
+    s.pacientes.find((p) => p.id === id),
+  );
+  const eliminarPaciente = usePacienteStore((s) => s.eliminarPaciente);
 
   const handleFinish = () => {
-    navigate('/pacientes')
-  }
+    navigate('/pacientes');
+  };
 
   if (!paciente) {
     return (
@@ -19,7 +21,9 @@ export default function EditarPaciente() {
         <Navbar />
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Editar Paciente</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+              Editar Paciente
+            </h1>
           </div>
         </header>
         <main>
@@ -28,7 +32,7 @@ export default function EditarPaciente() {
           </div>
         </main>
       </>
-    )
+    );
   }
 
   return (
@@ -36,7 +40,9 @@ export default function EditarPaciente() {
       <Navbar />
       <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Editar Paciente</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Editar Paciente
+          </h1>
         </div>
       </header>
       <main>
@@ -52,8 +58,8 @@ export default function EditarPaciente() {
           <FormPaciente paciente={paciente} onFinish={handleFinish} />
           <button
             onClick={() => {
-              eliminarPaciente(paciente.id)
-              navigate('/pacientes')
+              eliminarPaciente(paciente.id);
+              navigate('/pacientes');
             }}
             className="text-red-600 hover:underline mt-4"
           >
@@ -62,6 +68,5 @@ export default function EditarPaciente() {
         </div>
       </main>
     </>
-  )
+  );
 }
-

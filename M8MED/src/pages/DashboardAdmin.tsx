@@ -1,54 +1,58 @@
-import { useState } from 'react'
-import Navbar from '../components/Navbar'
-import { useM8Store } from '../store/useM8Store'
-import DoctorDetail from './DoctorDetail'
-import PatientDetail from './PatientDetail'
-import FormDoctor from '../components/FormDoctor'
-import { usePacienteStore } from '../store/usePacienteStore'
-import Modal from '../components/Modal'
+import { useState } from 'react';
+import Navbar from '../components/Navbar';
+import { useM8Store } from '../store/useM8Store';
+import DoctorDetail from './DoctorDetail';
+import PatientDetail from './PatientDetail';
+import FormDoctor from '../components/FormDoctor';
+import { usePacienteStore } from '../store/usePacienteStore';
+import Modal from '../components/Modal';
 
 export default function DashboardAdmin() {
-  const doctores = useM8Store((state) => state.doctores)
-  const cirugias = useM8Store((state) => state.cirugias)
-  const pacientes = usePacienteStore((s) => s.pacientes)
-  const cambiarEstadoDoctor = useM8Store((s) => s.cambiarEstadoDoctor)
-  const doctoresActivos = doctores.filter((d) => d.activo)
-  const doctoresSuspendidos = doctores.filter((d) => !d.activo)
+  const doctores = useM8Store((state) => state.doctores);
+  const cirugias = useM8Store((state) => state.cirugias);
+  const pacientes = usePacienteStore((s) => s.pacientes);
+  const cambiarEstadoDoctor = useM8Store((s) => s.cambiarEstadoDoctor);
+  const doctoresActivos = doctores.filter((d) => d.activo);
+  const doctoresSuspendidos = doctores.filter((d) => !d.activo);
 
   // Estados para abrir/cerrar modales
-  const [detailDoctorId, setDetailDoctorId] = useState<string | null>(null)
-  const [editDoctorId, setEditDoctorId] = useState<string | null>(null)
-  const [detailPatientId, setDetailPatientId] = useState<string | null>(null)
+  const [detailDoctorId, setDetailDoctorId] = useState<string | null>(null);
+  const [editDoctorId, setEditDoctorId] = useState<string | null>(null);
+  const [detailPatientId, setDetailPatientId] = useState<string | null>(null);
 
   const contarParticipacionesDelMes = (doctorId: string) => {
-    const ahora = new Date()
-    const mesActual = ahora.getMonth()
-    const anioActual = ahora.getFullYear()
+    const ahora = new Date();
+    const mesActual = ahora.getMonth();
+    const anioActual = ahora.getFullYear();
     return cirugias.filter((c) => {
-      const fecha = new Date(`${c.fecha}T${c.hora}`)
+      const fecha = new Date(`${c.fecha}T${c.hora}`);
       return (
         (c.doctorId === doctorId || c.ayudantes.includes(doctorId)) &&
         fecha.getFullYear() === anioActual &&
         fecha.getMonth() === mesActual
-      )
-    }).length
-  }
+      );
+    }).length;
+  };
 
   return (
     <>
       <Navbar />
       <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Panel de Admin</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Panel de Admin
+          </h1>
         </div>
       </header>
       <main>
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 bg-gradient-to-br from-sky-50 to-indigo-100 min-h-screen">
-
           <h2 className="text-2xl font-semibold mb-4">Médicos activos</h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {doctoresActivos.map((doc) => (
-              <div key={doc.id} className="card hover:shadow-md transition-shadow">
+              <div
+                key={doc.id}
+                className="card hover:shadow-md transition-shadow"
+              >
                 <h3 className="text-lg font-semibold text-slate-800">
                   {doc.nombre} {doc.apellido}
                 </h3>
@@ -86,10 +90,15 @@ export default function DashboardAdmin() {
 
           {doctoresSuspendidos.length > 0 && (
             <>
-              <h2 className="text-2xl font-semibold mt-10 mb-4">Médicos suspendidos</h2>
+              <h2 className="text-2xl font-semibold mt-10 mb-4">
+                Médicos suspendidos
+              </h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {doctoresSuspendidos.map((doc) => (
-                  <div key={doc.id} className="card hover:shadow-md transition-shadow">
+                  <div
+                    key={doc.id}
+                    className="card hover:shadow-md transition-shadow"
+                  >
                     <h3 className="text-lg font-semibold text-slate-800">
                       {doc.nombre} {doc.apellido}
                     </h3>
@@ -109,11 +118,11 @@ export default function DashboardAdmin() {
             </>
           )}
 
-        {pacientes.length > 0 && (
-          <>
-            <h2 className="text-2xl font-semibold mt-10 mb-4">Pacientes</h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {pacientes.map((p) => (
+          {pacientes.length > 0 && (
+            <>
+              <h2 className="text-2xl font-semibold mt-10 mb-4">Pacientes</h2>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {pacientes.map((p) => (
                   <div
                     key={p.id}
                     className="card hover:shadow-md transition-shadow"
@@ -138,11 +147,17 @@ export default function DashboardAdmin() {
       </main>
 
       {/* Modales */}
-      <Modal isOpen={detailDoctorId !== null} onClose={() => setDetailDoctorId(null)}>
+      <Modal
+        isOpen={detailDoctorId !== null}
+        onClose={() => setDetailDoctorId(null)}
+      >
         {detailDoctorId && <DoctorDetail doctorId={detailDoctorId} />}
       </Modal>
 
-      <Modal isOpen={editDoctorId !== null} onClose={() => setEditDoctorId(null)}>
+      <Modal
+        isOpen={editDoctorId !== null}
+        onClose={() => setEditDoctorId(null)}
+      >
         {editDoctorId && (
           <FormDoctor
             doctor={doctores.find((d) => d.id === editDoctorId)}
@@ -151,11 +166,14 @@ export default function DashboardAdmin() {
         )}
       </Modal>
 
-      <Modal isOpen={detailPatientId !== null} onClose={() => setDetailPatientId(null)}>
+      <Modal
+        isOpen={detailPatientId !== null}
+        onClose={() => setDetailPatientId(null)}
+      >
         {detailPatientId && <PatientDetail pacienteId={detailPatientId} />}
       </Modal>
     </>
-  )
+  );
 }
 
 /**

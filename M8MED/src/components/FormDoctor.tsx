@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import { useM8Store, type Doctor } from '../store/useM8Store'
-import { v4 as uuidv4 } from 'uuid'
+import { useState } from 'react';
+import { useM8Store, type Doctor } from '../store/useM8Store';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
-  onFinish: () => void
-  doctor?: Doctor
-}
+  onFinish: () => void;
+  doctor?: Doctor;
+};
 
 export default function FormDoctor({ onFinish, doctor }: Props) {
-  const agregarDoctor = useM8Store((s) => s.agregarDoctor)
-  const editarDoctor = useM8Store((s) => s.editarDoctor)
+  const agregarDoctor = useM8Store((s) => s.agregarDoctor);
+  const editarDoctor = useM8Store((s) => s.editarDoctor);
   const [form, setForm] = useState({
     nombre: doctor?.nombre ?? '',
     apellido: doctor?.apellido ?? '',
@@ -19,30 +19,33 @@ export default function FormDoctor({ onFinish, doctor }: Props) {
     telefono: doctor?.telefono ?? '',
     matricula: doctor?.matricula ?? '',
     especialidad: doctor?.especialidad ?? '',
-  })
+  });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const { name, value } = e.target
-    setForm({ ...form, [name]: value })
-  }
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (doctor) {
-      editarDoctor(doctor.id, form)
+      editarDoctor(doctor.id, form);
     } else {
       agregarDoctor({
         ...form,
         id: uuidv4(),
-      })
+      });
     }
-    onFinish()
-  }
+    onFinish();
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow mt-6">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 bg-white p-6 rounded-lg shadow mt-6"
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <input
           name="nombre"
@@ -114,5 +117,5 @@ export default function FormDoctor({ onFinish, doctor }: Props) {
         {doctor ? 'Guardar cambios' : 'Guardar médico'}
       </button>
     </form>
-  )
+  );
 }

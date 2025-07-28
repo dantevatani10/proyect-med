@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import FormSurgery from '../components/FormSurgery'
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import FormSurgery from '../components/FormSurgery';
 
 export default function NewSurgery() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <>
       <Navbar />
@@ -12,5 +12,5 @@ export default function NewSurgery() {
         <FormSurgery onFinish={() => navigate('/dashboard-admin')} />
       </div>
     </>
-  )
+  );
 }

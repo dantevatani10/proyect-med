@@ -1,25 +1,25 @@
-import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
-import { useM8Store, type Surgery } from '../store/useM8Store'
-import { usePacienteStore } from '../store/usePacienteStore'
-import type { Paciente } from '../types/paciente'
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { useM8Store, type Surgery } from '../store/useM8Store';
+import { usePacienteStore } from '../store/usePacienteStore';
+import type { Paciente } from '../types/paciente';
 
 type Props = {
-  onFinish: () => void
-  surgery?: Surgery
-}
+  onFinish: () => void;
+  surgery?: Surgery;
+};
 
 export default function FormSurgery({ onFinish, surgery }: Props) {
-  const agregarCirugia = useM8Store((s) => s.agregarCirugia)
-  const editarCirugia = useM8Store((s) => s.editarCirugia)
-  const doctores = useM8Store((s) => s.doctores)
+  const agregarCirugia = useM8Store((s) => s.agregarCirugia);
+  const editarCirugia = useM8Store((s) => s.editarCirugia);
+  const doctores = useM8Store((s) => s.doctores);
 
-  const pacientes = usePacienteStore((s) => s.pacientes)
-  const agregarPaciente = usePacienteStore((s) => s.agregarPaciente)
+  const pacientes = usePacienteStore((s) => s.pacientes);
+  const agregarPaciente = usePacienteStore((s) => s.agregarPaciente);
 
-  const [usarExistente, setUsarExistente] = useState(true)
-  const [pacienteId, setPacienteId] = useState('')
-  const [pacienteNuevo, setPacienteNuevo] = useState({ nombre: '', dni: '' })
+  const [usarExistente, setUsarExistente] = useState(true);
+  const [pacienteId, setPacienteId] = useState('');
+  const [pacienteNuevo, setPacienteNuevo] = useState({ nombre: '', dni: '' });
 
   const [form, setForm] = useState({
     fecha: surgery?.fecha ?? '',
@@ -30,30 +30,30 @@ export default function FormSurgery({ onFinish, surgery }: Props) {
     doctorId: surgery?.doctorId ?? '',
     ayudantes: surgery?.ayudantes ?? ([] as string[]),
     imagen: surgery?.imagen ?? '',
-  })
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    let paciente: { nombre: string; dni: string }
+    e.preventDefault();
+    let paciente: { nombre: string; dni: string };
     if (surgery) {
-      paciente = surgery.paciente
+      paciente = surgery.paciente;
     } else {
       paciente = usarExistente
-        ? pacientes.find((p) => p.id === pacienteId) ?? {
+        ? (pacientes.find((p) => p.id === pacienteId) ?? {
             nombre: '',
             dni: '',
-          }
-        : pacienteNuevo
+          })
+        : pacienteNuevo;
 
       if (!paciente.nombre || !paciente.dni) {
-        alert('Faltan datos del paciente')
-        return
+        alert('Faltan datos del paciente');
+        return;
       }
 
       if (!usarExistente) {
-        const existe = pacientes.some((p) => p.dni === paciente.dni)
+        const existe = pacientes.some((p) => p.dni === paciente.dni);
         if (!existe) {
-          const [nombre, ...apRest] = paciente.nombre.trim().split(' ')
+          const [nombre, ...apRest] = paciente.nombre.trim().split(' ');
           const nuevoPaciente: Paciente = {
             id: uuidv4(),
             nombre,
@@ -67,22 +67,22 @@ export default function FormSurgery({ onFinish, surgery }: Props) {
             fechaNacimiento: '',
             tratamiento: '',
             doctorId: form.doctorId,
-          }
-          agregarPaciente(nuevoPaciente)
+          };
+          agregarPaciente(nuevoPaciente);
         }
       }
     }
 
     if (surgery) {
-      editarCirugia(surgery.id, { ...form, paciente })
-      alert('Cirugía modificada')
+      editarCirugia(surgery.id, { ...form, paciente });
+      alert('Cirugía modificada');
     } else {
-      agregarCirugia({ ...form, paciente })
-      alert('Cirugía guardada')
+      agregarCirugia({ ...form, paciente });
+      alert('Cirugía guardada');
     }
 
-    onFinish()
-  }
+    onFinish();
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -231,13 +231,13 @@ export default function FormSurgery({ onFinish, surgery }: Props) {
         type="file"
         accept="image/*"
         onChange={(e) => {
-          const file = e.target.files?.[0]
-          if (!file) return
-          const reader = new FileReader()
+          const file = e.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
           reader.onloadend = () => {
-            setForm({ ...form, imagen: reader.result as string })
-          }
-          reader.readAsDataURL(file)
+            setForm({ ...form, imagen: reader.result as string });
+          };
+          reader.readAsDataURL(file);
         }}
         className="input"
       />
@@ -246,6 +246,5 @@ export default function FormSurgery({ onFinish, surgery }: Props) {
         {surgery ? 'Guardar cambios' : 'Guardar cirugía'}
       </button>
     </form>
-  )
+  );
 }
-

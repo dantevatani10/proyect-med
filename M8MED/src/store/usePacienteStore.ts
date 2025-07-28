@@ -1,13 +1,13 @@
-import { create } from 'zustand'
-import type { Paciente } from '../types/paciente'
+import { create } from 'zustand';
+import type { Paciente } from '../types/paciente';
 
 type State = {
-  pacientes: Paciente[]
-  setPacientes: (data: Paciente[]) => void
-  agregarPaciente: (nuevo: Paciente) => void
-  editarPaciente: (id: string, data: Omit<Paciente, 'id'>) => void
-  eliminarPaciente: (id: string) => void
-}
+  pacientes: Paciente[];
+  setPacientes: (data: Paciente[]) => void;
+  agregarPaciente: (nuevo: Paciente) => void;
+  editarPaciente: (id: string, data: Omit<Paciente, 'id'>) => void;
+  eliminarPaciente: (id: string) => void;
+};
 
 export const usePacienteStore = create<State>((set) => ({
   pacientes: [
@@ -46,11 +46,11 @@ export const usePacienteStore = create<State>((set) => ({
   editarPaciente: (id, data) =>
     set((state) => ({
       pacientes: state.pacientes.map((p) =>
-        p.id === id ? { ...p, ...data } : p
+        p.id === id ? { ...p, ...data } : p,
       ),
     })),
   eliminarPaciente: (id) =>
     set((state) => ({
       pacientes: state.pacientes.filter((p) => p.id !== id),
     })),
-}))
+}));

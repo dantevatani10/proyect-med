@@ -1,57 +1,56 @@
-import { Link } from 'react-router-dom'
-import { useM8Store } from '../store/useM8Store'
-import { useState, useMemo } from 'react'
-import type { Surgery } from '../store/useM8Store'
-import { meses, ultimosAnios } from '../lib/date'
+import { Link } from 'react-router-dom';
+import { useM8Store } from '../store/useM8Store';
+import { useState, useMemo } from 'react';
+import type { Surgery } from '../store/useM8Store';
+import { meses, ultimosAnios } from '../lib/date';
 
 type Props = {
-  doctorId: string
-}
+  doctorId: string;
+};
 export default function DoctorDetail({ doctorId }: Props) {
   // Obtenemos las referencias originales de doctores y cirugías
-  const doctores = useM8Store((state) => state.doctores)
-  const cirugias = useM8Store((state) => state.cirugias)
-  const doctor = doctores.find((d) => d.id === doctorId)
+  const doctores = useM8Store((state) => state.doctores);
+  const cirugias = useM8Store((state) => state.cirugias);
+  const doctor = doctores.find((d) => d.id === doctorId);
 
   // Mapeamos IDs de doctores a nombres usando useMemo
   const doctorNames = useMemo(() => {
-    const map: Record<string, string> = {}
+    const map: Record<string, string> = {};
     doctores.forEach((d) => {
-      map[d.id] = `${d.nombre} ${d.apellido}`
-    })
-    return map
-  }, [doctores])
+      map[d.id] = `${d.nombre} ${d.apellido}`;
+    });
+    return map;
+  }, [doctores]);
 
   // Estados para filtrar por mes y año
-  const ahora = new Date()
-  const [mesFiltro, setMesFiltro] = useState<number>(ahora.getMonth() + 1)
-  const [anioFiltro, setAnioFiltro] = useState<number>(ahora.getFullYear())
+  const ahora = new Date();
+  const [mesFiltro, setMesFiltro] = useState<number>(ahora.getMonth() + 1);
+  const [anioFiltro, setAnioFiltro] = useState<number>(ahora.getFullYear());
 
   // Calcula el monto asignado a este médico para cada cirugía usando valorBase
   const obtenerMonto = (c: Surgery) => {
-    const partes = 1 + c.ayudantes.length
-    return c.valorBase / partes
-  }
+    const partes = 1 + c.ayudantes.length;
+    return c.valorBase / partes;
+  };
 
-  const anios = useMemo(() => ultimosAnios(), [])
+  const anios = useMemo(() => ultimosAnios(), []);
 
   if (!doctor) {
     return (
       <div className="p-6">
         <p>Médico no encontrado.</p>
       </div>
-    )
+    );
   }
 
   // Filtramos las cirugías del médico según mes y año seleccionados
   const cirugiasDelMedico = cirugias.filter((c) => {
-    if (c.doctorId !== doctor.id) return false
-    const fecha = new Date(`${c.fecha}T${c.hora}`)
+    if (c.doctorId !== doctor.id) return false;
+    const fecha = new Date(`${c.fecha}T${c.hora}`);
     return (
-      fecha.getMonth() + 1 === mesFiltro &&
-      fecha.getFullYear() === anioFiltro
-    )
-  })
+      fecha.getMonth() + 1 === mesFiltro && fecha.getFullYear() === anioFiltro
+    );
+  });
 
   return (
     <div className="p-6 bg-white rounded-xl shadow max-w-3xl mx-auto">
@@ -139,9 +138,7 @@ export default function DoctorDetail({ doctorId }: Props) {
                       .map((aid) => doctorNames[aid] ?? aid)
                       .join(', ')}
                   </td>
-                  <td className="px-4 py-2">
-                    ${obtenerMonto(c).toFixed(2)}
-                  </td>
+                  <td className="px-4 py-2">${obtenerMonto(c).toFixed(2)}</td>
                   <td className="px-4 py-2">
                     {c.imagen ? (
                       <img
@@ -167,5 +164,5 @@ export default function DoctorDetail({ doctorId }: Props) {
         Cargar nueva cirugía
       </Link>
     </div>
-  )
+  );
 }

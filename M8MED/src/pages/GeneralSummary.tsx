@@ -1,84 +1,82 @@
-import { useM8Store, type Surgery } from '../store/useM8Store'
-import { useState, useMemo } from 'react'
-import FormSurgery from '../components/FormSurgery'
-import Modal from '../components/Modal'
-import { meses, ultimosAnios } from '../lib/date'
+import { useM8Store, type Surgery } from '../store/useM8Store';
+import { useState, useMemo } from 'react';
+import FormSurgery from '../components/FormSurgery';
+import Modal from '../components/Modal';
+import { meses, ultimosAnios } from '../lib/date';
 
 export default function GeneralSummary() {
   // Datos de la store
-  const doctores = useM8Store((state) => state.doctores)
-  const cirugias = useM8Store((state) => state.cirugias)
-  const eliminarCirugia = useM8Store((s) => s.eliminarCirugia)
+  const doctores = useM8Store((state) => state.doctores);
+  const cirugias = useM8Store((state) => state.cirugias);
+  const eliminarCirugia = useM8Store((s) => s.eliminarCirugia);
 
-  const [showForm, setShowForm] = useState(false)
-  const [editSurgery, setEditSurgery] = useState<Surgery | null>(null)
+  const [showForm, setShowForm] = useState(false);
+  const [editSurgery, setEditSurgery] = useState<Surgery | null>(null);
 
   // Filtros de mes, año y médico
-  const ahora = new Date()
-  const [mesFiltro, setMesFiltro] = useState<number>(ahora.getMonth() + 1)
-  const [anioFiltro, setAnioFiltro] = useState<number>(ahora.getFullYear())
-  const [medicoFiltro, setMedicoFiltro] = useState<string>('') // '' significa todos
+  const ahora = new Date();
+  const [mesFiltro, setMesFiltro] = useState<number>(ahora.getMonth() + 1);
+  const [anioFiltro, setAnioFiltro] = useState<number>(ahora.getFullYear());
+  const [medicoFiltro, setMedicoFiltro] = useState<string>(''); // '' significa todos
 
   // Mapeo de IDs a nombres de médicos
   const doctorNames = useMemo(() => {
-    const map: Record<string, string> = {}
+    const map: Record<string, string> = {};
     doctores.forEach((d) => {
-      map[d.id] = `${d.nombre} ${d.apellido}`
-    })
-    return map
-  }, [doctores])
+      map[d.id] = `${d.nombre} ${d.apellido}`;
+    });
+    return map;
+  }, [doctores]);
 
   // Filtrar cirugías por mes, año y (opcional) médico participante
   const cirugiasFiltradas = useMemo(() => {
     return cirugias.filter((c) => {
-      const fecha = new Date(`${c.fecha}T${c.hora}`)
+      const fecha = new Date(`${c.fecha}T${c.hora}`);
       const coincideFecha =
         fecha.getMonth() + 1 === mesFiltro &&
-        fecha.getFullYear() === anioFiltro
+        fecha.getFullYear() === anioFiltro;
       const coincideMedico =
         !medicoFiltro ||
         c.doctorId === medicoFiltro ||
-        c.ayudantes.includes(medicoFiltro)
-      return coincideFecha && coincideMedico
-    })
-  }, [cirugias, mesFiltro, anioFiltro, medicoFiltro])
+        c.ayudantes.includes(medicoFiltro);
+      return coincideFecha && coincideMedico;
+    });
+  }, [cirugias, mesFiltro, anioFiltro, medicoFiltro]);
 
-  const anios = useMemo(() => ultimosAnios(), [])
+  const anios = useMemo(() => ultimosAnios(), []);
 
   // Exportar a CSV detallado
   const exportCSV = () => {
     let csv =
-      'Fecha,Hora,Paciente,Diagnóstico,Tratamiento,Complejidad,Nivel valor,Valor base,Participantes,Monto por participante\n'
+      'Fecha,Hora,Paciente,Diagnóstico,Tratamiento,Complejidad,Nivel valor,Valor base,Participantes,Monto por participante\n';
     cirugiasFiltradas.forEach((c) => {
       const participantes = [c.doctorId, ...c.ayudantes]
         .map((id) => doctorNames[id] ?? id)
-        .join(' / ')
-      const partes = 1 + c.ayudantes.length
-      const pago = c.valorBase / partes
-      csv += `"${c.fecha}","${c.hora}","${c.paciente.nombre} (${c.paciente.dni})","${c.diagnostico}","${c.tipo}",${c.complejidad},${c.valorBase},"${participantes}",${pago}\n`
-    })
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
+        .join(' / ');
+      const partes = 1 + c.ayudantes.length;
+      const pago = c.valorBase / partes;
+      csv += `"${c.fecha}","${c.hora}","${c.paciente.nombre} (${c.paciente.dni})","${c.diagnostico}","${c.tipo}",${c.complejidad},${c.valorBase},"${participantes}",${pago}\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
     link.setAttribute(
       'download',
-      `resumen_detalle_${mesFiltro}_${anioFiltro}.csv`
-    )
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+      `resumen_detalle_${mesFiltro}_${anioFiltro}.csv`,
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="p-6 max-w-full mx-auto">
-      <h1 className="text-2xl font-bold mb-4">
-        Resumen general de cirugías
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Resumen general de cirugías</h1>
 
       {/* Filtros de mes, año y médico */}
       <div className="flex flex-wrap gap-4 mb-4">
-      <div>
+        <div>
           <label className="mr-2 font-medium">Mes:</label>
           <select
             value={mesFiltro}
@@ -126,8 +124,8 @@ export default function GeneralSummary() {
       <div className="mb-4">
         <button
           onClick={() => {
-            setEditSurgery(null)
-            setShowForm(true)
+            setEditSurgery(null);
+            setShowForm(true);
           }}
           className="btn"
         >
@@ -156,9 +154,9 @@ export default function GeneralSummary() {
             {cirugiasFiltradas.map((c) => {
               const participantes = [c.doctorId, ...c.ayudantes]
                 .map((id) => doctorNames[id] ?? id)
-                .join(' / ')
-              const partes = 1 + c.ayudantes.length
-              const pago = c.valorBase / partes
+                .join(' / ');
+              const partes = 1 + c.ayudantes.length;
+              const pago = c.valorBase / partes;
               return (
                 <tr key={c.id} className="border-b hover:bg-gray-50">
                   <td className="px-4 py-2">{c.fecha}</td>
@@ -175,8 +173,8 @@ export default function GeneralSummary() {
                   <td className="px-4 py-2 space-x-2">
                     <button
                       onClick={() => {
-                        setEditSurgery(c)
-                        setShowForm(true)
+                        setEditSurgery(c);
+                        setShowForm(true);
                       }}
                       className="text-sky-600 hover:underline"
                     >
@@ -190,7 +188,7 @@ export default function GeneralSummary() {
                     </button>
                   </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>
@@ -207,12 +205,11 @@ export default function GeneralSummary() {
         <FormSurgery
           surgery={editSurgery ?? undefined}
           onFinish={() => {
-            setShowForm(false)
-            setEditSurgery(null)
+            setShowForm(false);
+            setEditSurgery(null);
           }}
         />
       </Modal>
     </div>
-  )
+  );
 }
-

@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import { useTurnoStore, type Turno } from '../store/useTurnoStore'
-import { useM8Store } from '../store/useM8Store'
-import { usePacienteStore } from '../store/usePacienteStore'
+import { useState } from 'react';
+import { useTurnoStore, type Turno } from '../store/useTurnoStore';
+import { useM8Store } from '../store/useM8Store';
+import { usePacienteStore } from '../store/usePacienteStore';
 
 type Props = {
-  onFinish: () => void
-  turno?: Turno
-  doctorIdFixed?: string
-}
+  onFinish: () => void;
+  turno?: Turno;
+  doctorIdFixed?: string;
+};
 
 export default function FormTurno({ onFinish, turno, doctorIdFixed }: Props) {
-  const agregarTurno = useTurnoStore((s) => s.agregarTurno)
-  const editarTurno = useTurnoStore((s) => s.editarTurno)
-  const doctores = useM8Store((s) => s.doctores)
-  const pacientesAll = usePacienteStore((s) => s.pacientes)
+  const agregarTurno = useTurnoStore((s) => s.agregarTurno);
+  const editarTurno = useTurnoStore((s) => s.editarTurno);
+  const doctores = useM8Store((s) => s.doctores);
+  const pacientesAll = usePacienteStore((s) => s.pacientes);
 
   const [form, setForm] = useState<Omit<Turno, 'id'>>({
     doctorId: doctorIdFixed ?? turno?.doctorId ?? doctores[0]?.id ?? '',
@@ -22,30 +22,32 @@ export default function FormTurno({ onFinish, turno, doctorIdFixed }: Props) {
     hora: turno?.hora ?? '',
     tipo: turno?.tipo ?? 'consultorio',
     descripcion: turno?.descripcion ?? '',
-  })
+  });
 
   const pacientes = doctorIdFixed
-    ? pacientesAll.filter((p) => p.doctorId === (doctorIdFixed ?? turno?.doctorId))
-    : pacientesAll
+    ? pacientesAll.filter(
+        (p) => p.doctorId === (doctorIdFixed ?? turno?.doctorId),
+      )
+    : pacientesAll;
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    >,
   ) => {
-    const { name, value } = e.target
-    setForm({ ...form, [name]: value })
-  }
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (turno) {
-      editarTurno(turno.id, form)
+      editarTurno(turno.id, form);
     } else {
-      agregarTurno(form)
+      agregarTurno(form);
     }
-    onFinish()
-  }
+    onFinish();
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -116,5 +118,5 @@ export default function FormTurno({ onFinish, turno, doctorIdFixed }: Props) {
         Guardar turno
       </button>
     </form>
-  )
+  );
 }
