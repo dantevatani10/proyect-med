@@ -8,7 +8,7 @@ export default function Pacientes() {
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto p-6 pt-20">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Pacientes</h1>
           <Link to="/agregar-paciente" className="btn">+ Agregar Paciente</Link>
