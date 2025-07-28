@@ -4,11 +4,13 @@ import Modal from '../components/Modal'
 import Calendar from '../components/Calendar'
 import { useM8Store } from '../store/useM8Store'
 import { useUserStore } from '../store/useUserStore'
+import { usePacienteStore } from '../store/usePacienteStore'
 
 export default function DashboardMedico() {
   const user = useUserStore((s) => s.user)
   const doctores = useM8Store((s) => s.doctores)
   const cirugias = useM8Store((s) => s.cirugias)
+  const pacientesAll = usePacienteStore((s) => s.pacientes)
 
   // Buscar el médico según el id del usuario. Si no existe, usar el primero.
   const doctor = useMemo(() => {
@@ -25,20 +27,11 @@ export default function DashboardMedico() {
     [cirugias, doctor.id]
   )
 
-  // Pacientes únicos asociados al médico
-  const pacientes = useMemo(() => {
-    const mapa = new Map<string, { nombre: string; apellido: string }>()
-    cirugiasDoctor.forEach((c) => {
-      const dni = c.paciente.dni
-      if (!mapa.has(dni)) {
-        mapa.set(dni, {
-          nombre: c.paciente.nombre,
-          apellido: '',
-        })
-      }
-    })
-    return Array.from(mapa.values())
-  }, [cirugiasDoctor])
+  // Pacientes asociados al médico
+  const pacientes = useMemo(
+    () => pacientesAll.filter((p) => p.doctorId === doctor.id),
+    [pacientesAll, doctor.id]
+  )
 
   const [showPopup, setShowPopup] = useState(false)
 

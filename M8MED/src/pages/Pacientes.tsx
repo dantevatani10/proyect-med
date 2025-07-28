@@ -1,10 +1,12 @@
 import { usePacienteStore } from '../store/usePacienteStore'
+import { useM8Store } from '../store/useM8Store'
 import Navbar from '../components/Navbar'
 import { Link } from 'react-router-dom'
 
 export default function Pacientes() {
   const pacientes = usePacienteStore((state) => state.pacientes)
   const eliminarPaciente = usePacienteStore((s) => s.eliminarPaciente)
+  const doctores = useM8Store((s) => s.doctores)
 
   return (
     <>
@@ -25,6 +27,7 @@ export default function Pacientes() {
                 <th className="px-4 py-2">Teléfono</th>
                 <th className="px-4 py-2">Email</th>
                 <th className="px-4 py-2">Género</th>
+                <th className="px-4 py-2">Médico</th>
                 <th className="px-4 py-2">Acciones</th>
               </tr>
             </thead>
@@ -37,6 +40,10 @@ export default function Pacientes() {
                   <td className="px-4 py-2">{paciente.telefono}</td>
                   <td className="px-4 py-2">{paciente.email}</td>
                   <td className="px-4 py-2 capitalize">{paciente.genero}</td>
+                  <td className="px-4 py-2">
+                    {doctores.find((d) => d.id === paciente.doctorId)?.nombre}{' '}
+                    {doctores.find((d) => d.id === paciente.doctorId)?.apellido}
+                  </td>
                   <td className="px-4 py-2 space-x-2">
                     <Link
                       to={`/pacientes/editar/${paciente.id}`}

@@ -66,6 +66,7 @@ export default function FormSurgery({ onFinish, surgery }: Props) {
             antecedentes: '',
             fechaNacimiento: '',
             tratamiento: '',
+            doctorId: form.doctorId,
           }
           agregarPaciente(nuevoPaciente)
         }

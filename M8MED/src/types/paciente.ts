@@ -10,4 +10,5 @@ export type Paciente = {
   antecedentes?: string
   fechaNacimiento: string // formato ISO
   tratamiento: string
+  doctorId: string
 }

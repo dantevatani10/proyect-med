@@ -23,6 +23,7 @@ export const usePacienteStore = create<State>((set) => ({
       antecedentes: '',
       fechaNacimiento: '1980-05-10',
       tratamiento: 'Control mensual',
+      doctorId: 'doc1',
     },
     {
       id: 'pac2',
@@ -36,6 +37,7 @@ export const usePacienteStore = create<State>((set) => ({
       antecedentes: 'Familiar diabético',
       fechaNacimiento: '1975-10-20',
       tratamiento: 'Insulina',
+      doctorId: 'doc2',
     },
   ],
   setPacientes: (data) => set({ pacientes: data }),
