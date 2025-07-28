@@ -42,6 +42,8 @@ type M8Store = {
     data: Omit<Doctor, 'id' | 'sueldo' | 'activo'>
   ) => void
   cambiarEstadoDoctor: (id: string, activo: boolean) => void
+  editarCirugia: (id: string, data: Omit<Surgery, 'id' | 'valorBase'>) => void
+  eliminarCirugia: (id: string) => void
 }
 
 export const useM8Store = create<M8Store>()(
@@ -128,6 +130,63 @@ export const useM8Store = create<M8Store>()(
             d.id === id ? { ...d, ...data } : d
           ),
         }))
+      },
+      editarCirugia: (id, data) => {
+        set((state) => {
+          const idx = state.cirugias.findIndex((c) => c.id === id)
+          if (idx === -1) return state
+          const anterior = state.cirugias[idx]
+          const valorPrev =
+            state.complejidadValores[anterior.complejidad] ?? 0
+          const partesPrev = 1 + anterior.ayudantes.length
+          const pagoPrev = valorPrev / partesPrev
+
+          let doctores = state.doctores.map((d) =>
+            d.id === anterior.doctorId || anterior.ayudantes.includes(d.id)
+              ? { ...d, sueldo: d.sueldo - pagoPrev }
+              : d
+          )
+
+          const valorNuevo =
+            state.complejidadValores[data.complejidad] ?? 0
+          const partesNuevo = 1 + data.ayudantes.length
+          const pagoNuevo = valorNuevo / partesNuevo
+
+          doctores = doctores.map((d) =>
+            d.id === data.doctorId || data.ayudantes.includes(d.id)
+              ? { ...d, sueldo: d.sueldo + pagoNuevo }
+              : d
+          )
+
+          const nuevaCirugia: Surgery = {
+            ...data,
+            id,
+            valorBase: valorNuevo,
+          }
+
+          const nuevas = [...state.cirugias]
+          nuevas[idx] = nuevaCirugia
+
+          return { cirugias: nuevas, doctores }
+        })
+      },
+      eliminarCirugia: (id) => {
+        set((state) => {
+          const cirugia = state.cirugias.find((c) => c.id === id)
+          if (!cirugia) return state
+          const valor = state.complejidadValores[cirugia.complejidad] ?? 0
+          const partes = 1 + cirugia.ayudantes.length
+          const pago = valor / partes
+
+          return {
+            cirugias: state.cirugias.filter((c) => c.id !== id),
+            doctores: state.doctores.map((d) =>
+              d.id === cirugia.doctorId || cirugia.ayudantes.includes(d.id)
+                ? { ...d, sueldo: d.sueldo - pago }
+                : d
+            ),
+          }
+        })
       },
       cambiarEstadoDoctor: (id, activo) => {
         set((state) => ({

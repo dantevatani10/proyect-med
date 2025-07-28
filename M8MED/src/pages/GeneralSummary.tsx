@@ -1,10 +1,15 @@
-import { useM8Store } from '../store/useM8Store'
+import { useM8Store, type Surgery } from '../store/useM8Store'
 import { useState, useMemo } from 'react'
+import FormSurgery from '../components/FormSurgery'
 
 export default function GeneralSummary() {
   // Datos de la store
   const doctores = useM8Store((state) => state.doctores)
   const cirugias = useM8Store((state) => state.cirugias)
+  const eliminarCirugia = useM8Store((s) => s.eliminarCirugia)
+
+  const [showForm, setShowForm] = useState(false)
+  const [editSurgery, setEditSurgery] = useState<Surgery | null>(null)
 
   // Filtros de mes, año y médico
   const ahora = new Date()
@@ -134,6 +139,18 @@ export default function GeneralSummary() {
         </div>
       </div>
 
+      <div className="mb-4">
+        <button
+          onClick={() => {
+            setEditSurgery(null)
+            setShowForm(true)
+          }}
+          className="btn"
+        >
+          Nueva cirugía
+        </button>
+      </div>
+
       {/* Tabla detallada */}
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
@@ -148,6 +165,7 @@ export default function GeneralSummary() {
               <th className="px-4 py-2">Valor base</th>
               <th className="px-4 py-2">Participantes</th>
               <th className="px-4 py-2">Pago por participante</th>
+              <th className="px-4 py-2">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -165,11 +183,28 @@ export default function GeneralSummary() {
                     {c.paciente.nombre} ({c.paciente.dni})
                   </td>
                   <td className="px-4 py-2">{c.diagnostico}</td>
-                    <td className="px-4 py-2">{c.tipo}</td>
+                  <td className="px-4 py-2">{c.tipo}</td>
                   <td className="px-4 py-2 text-center">{c.complejidad}</td>
                   <td className="px-4 py-2">${c.valorBase.toFixed(2)}</td>
                   <td className="px-4 py-2">{participantes}</td>
                   <td className="px-4 py-2">${pago.toFixed(2)}</td>
+                  <td className="px-4 py-2 space-x-2">
+                    <button
+                      onClick={() => {
+                        setEditSurgery(c)
+                        setShowForm(true)
+                      }}
+                      className="text-sky-600 hover:underline"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => eliminarCirugia(c.id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Eliminar
+                    </button>
+                  </td>
                 </tr>
               )
             })}
@@ -183,6 +218,46 @@ export default function GeneralSummary() {
       >
         Exportar CSV
       </button>
+
+      <Modal isOpen={showForm} onClose={() => setShowForm(false)}>
+        <FormSurgery
+          surgery={editSurgery ?? undefined}
+          onFinish={() => {
+            setShowForm(false)
+            setEditSurgery(null)
+          }}
+        />
+      </Modal>
+    </div>
+  )
+}
+
+function Modal({
+  isOpen,
+  onClose,
+  children,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  children: React.ReactNode
+}) {
+  if (!isOpen) return null
+  return (
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white p-6 w-full max-w-lg max-h-screen overflow-y-auto rounded-xl shadow-lg"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-end">
+          <button onClick={onClose} className="text-red-600 hover:underline mb-2">
+            Cerrar
+          </button>
+        </div>
+        {children}
+      </div>
     </div>
   )
 }

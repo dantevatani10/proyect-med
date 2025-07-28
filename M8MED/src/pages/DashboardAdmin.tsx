@@ -4,7 +4,6 @@ import Navbar from '../components/Navbar'
 import { useM8Store } from '../store/useM8Store'
 import EditComplexity from './EditComplexity'
 import Summary from './Summary'
-import GeneralSummary from './GeneralSummary'
 import DoctorDetail from './DoctorDetail'
 import PatientDetail from './PatientDetail'
 import FormDoctor from '../components/FormDoctor'
@@ -21,7 +20,6 @@ export default function DashboardAdmin() {
   // Estados para abrir/cerrar modales
   const [showComplexity, setShowComplexity] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
-  const [showGeneral, setShowGeneral] = useState(false)
   const [showAddDoctor, setShowAddDoctor] = useState(false)
   const [detailDoctorId, setDetailDoctorId] = useState<string | null>(null)
   const [editDoctorId, setEditDoctorId] = useState<string | null>(null)
@@ -60,9 +58,9 @@ export default function DashboardAdmin() {
             <button onClick={() => setShowSummary(true)} className="btn">
               Resumen mensual
             </button>
-            <button onClick={() => setShowGeneral(true)} className="btn">
+            <Link to="/resumen/detalle" className="btn">
               Resumen general
-            </button>
+            </Link>
           </div>
 
           <h2 className="text-2xl font-semibold mb-4">Médicos activos</h2>
@@ -166,9 +164,6 @@ export default function DashboardAdmin() {
         <Summary />
       </Modal>
 
-      <Modal isOpen={showGeneral} onClose={() => setShowGeneral(false)}>
-        <GeneralSummary />
-      </Modal>
 
       <Modal isOpen={detailDoctorId !== null} onClose={() => setDetailDoctorId(null)}>
         {detailDoctorId && <DoctorDetail doctorId={detailDoctorId} />}
