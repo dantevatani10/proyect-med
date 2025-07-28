@@ -1,6 +1,8 @@
 import { useM8Store, type Surgery } from '../store/useM8Store'
 import { useState, useMemo } from 'react'
 import FormSurgery from '../components/FormSurgery'
+import Modal from '../components/Modal'
+import { meses, ultimosAnios } from '../lib/date'
 
 export default function GeneralSummary() {
   // Datos de la store
@@ -41,25 +43,7 @@ export default function GeneralSummary() {
     })
   }, [cirugias, mesFiltro, anioFiltro, medicoFiltro])
 
-  const meses = [
-    { value: 1, label: 'Enero' },
-    { value: 2, label: 'Febrero' },
-    { value: 3, label: 'Marzo' },
-    { value: 4, label: 'Abril' },
-    { value: 5, label: 'Mayo' },
-    { value: 6, label: 'Junio' },
-    { value: 7, label: 'Julio' },
-    { value: 8, label: 'Agosto' },
-    { value: 9, label: 'Septiembre' },
-    { value: 10, label: 'Octubre' },
-    { value: 11, label: 'Noviembre' },
-    { value: 12, label: 'Diciembre' },
-  ]
-
-  const anios = useMemo(() => {
-    const actual = new Date().getFullYear()
-    return [actual, actual - 1, actual - 2, actual - 3, actual - 4]
-  }, [])
+  const anios = useMemo(() => ultimosAnios(), [])
 
   // Exportar a CSV detallado
   const exportCSV = () => {
@@ -232,32 +216,3 @@ export default function GeneralSummary() {
   )
 }
 
-function Modal({
-  isOpen,
-  onClose,
-  children,
-}: {
-  isOpen: boolean
-  onClose: () => void
-  children: React.ReactNode
-}) {
-  if (!isOpen) return null
-  return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white p-6 w-full max-w-lg max-h-screen overflow-y-auto rounded-xl shadow-lg"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex justify-end">
-          <button onClick={onClose} className="text-red-600 hover:underline mb-2">
-            Cerrar
-          </button>
-        </div>
-        {children}
-      </div>
-    </div>
-  )
-}

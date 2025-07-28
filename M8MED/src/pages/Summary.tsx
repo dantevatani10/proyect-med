@@ -1,5 +1,6 @@
 import { useM8Store } from '../store/useM8Store'
 import { useState, useMemo } from 'react'
+import { meses, ultimosAnios } from '../lib/date'
 
 export default function Summary() {
   // Obtenemos doctores y cirugías desde la store
@@ -11,25 +12,7 @@ export default function Summary() {
   const [mesFiltro, setMesFiltro] = useState<number>(ahora.getMonth() + 1)
   const [anioFiltro, setAnioFiltro] = useState<number>(ahora.getFullYear())
 
-  const meses = [
-    { value: 1, label: 'Enero' },
-    { value: 2, label: 'Febrero' },
-    { value: 3, label: 'Marzo' },
-    { value: 4, label: 'Abril' },
-    { value: 5, label: 'Mayo' },
-    { value: 6, label: 'Junio' },
-    { value: 7, label: 'Julio' },
-    { value: 8, label: 'Agosto' },
-    { value: 9, label: 'Septiembre' },
-    { value: 10, label: 'Octubre' },
-    { value: 11, label: 'Noviembre' },
-    { value: 12, label: 'Diciembre' },
-  ]
-
-  const anios = useMemo(() => {
-    const actual = new Date().getFullYear()
-    return [actual, actual - 1, actual - 2, actual - 3, actual - 4]
-  }, [])
+  const anios = useMemo(() => ultimosAnios(), [])
 
   // Filtramos todas las cirugías según mes y año seleccionados
   const cirugiasFiltradas = useMemo(() => {

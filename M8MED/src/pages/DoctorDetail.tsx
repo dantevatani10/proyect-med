@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useM8Store } from '../store/useM8Store'
 import { useState, useMemo } from 'react'
 import type { Surgery } from '../store/useM8Store'
+import { meses, ultimosAnios } from '../lib/date'
 
 type Props = {
   doctorId: string
@@ -32,26 +33,7 @@ export default function DoctorDetail({ doctorId }: Props) {
     return c.valorBase / partes
   }
 
-  const meses = [
-    { value: 1, label: 'Enero' },
-    { value: 2, label: 'Febrero' },
-    { value: 3, label: 'Marzo' },
-    { value: 4, label: 'Abril' },
-    { value: 5, label: 'Mayo' },
-    { value: 6, label: 'Junio' },
-    { value: 7, label: 'Julio' },
-    { value: 8, label: 'Agosto' },
-    { value: 9, label: 'Septiembre' },
-    { value: 10, label: 'Octubre' },
-    { value: 11, label: 'Noviembre' },
-    { value: 12, label: 'Diciembre' },
-  ]
-
-  // Preparamos una lista de años a elegir; aquí listamos los últimos 5 años
-  const anios = useMemo(() => {
-    const actual = new Date().getFullYear()
-    return [actual, actual - 1, actual - 2, actual - 3, actual - 4]
-  }, [])
+  const anios = useMemo(() => ultimosAnios(), [])
 
   if (!doctor) {
     return (
