@@ -13,10 +13,24 @@ export default function Login() {
 
     // Comprobamos credenciales fijas
     if (email === 'admin@test.com' && password === '1234') {
-      setUser({ email, rol: 'admin' })
+      setUser({
+        email,
+        rol: 'admin',
+        nombre: 'Admin',
+        apellido: 'Principal',
+        password,
+        foto: 'https://placehold.co/64',
+      })
       navigate('/dashboard-admin')
     } else if (email === 'medico@test.com' && password === '1234') {
-      setUser({ email, rol: 'medico' })
+      setUser({
+        email,
+        rol: 'medico',
+        nombre: 'Juan',
+        apellido: 'Pérez',
+        password,
+        foto: 'https://placehold.co/64',
+      })
       navigate('/dashboard-medico')
     } else {
       alert('Credenciales incorrectas')

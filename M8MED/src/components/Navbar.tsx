@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { useUserStore } from '../store/useUserStore'
 
 export default function Navbar() {
@@ -6,6 +7,8 @@ export default function Navbar() {
   const user = useUserStore((state) => state.user)
   const logout = useUserStore((state) => state.logout)
   const navigate = useNavigate()
+
+  const [open, setOpen] = useState(false)
 
   const handleLogout = () => {
     logout()
@@ -19,22 +22,42 @@ export default function Navbar() {
           MEDM8
         </Link>
         {user && (
-          <div className="flex items-center gap-6">
-            <span className="hidden sm:block">
-              {user.email} (
-              <span className="font-medium capitalize">{user.rol}</span>)
-            </span>
+          <div className="flex items-center gap-6 relative">
             {user.rol === 'admin' && (
               <Link to="/pacientes" className="hover:underline">
                 Pacientes
               </Link>
             )}
             <button
-              onClick={handleLogout}
-              className="bg-white text-sky-700 font-medium px-4 py-2 rounded-md shadow hover:bg-gray-100 text-sm"
+              onClick={() => setOpen((o) => !o)}
+              className="flex items-center gap-2 focus:outline-none"
             >
-              Cerrar Sesión
+              <img
+                src={user.foto || 'https://placehold.co/32'}
+                alt="avatar"
+                className="w-8 h-8 rounded-full object-cover"
+              />
+              <span className="hidden sm:block font-medium">
+                {user.nombre} {user.apellido}
+              </span>
             </button>
+            {open && (
+              <div className="absolute right-0 top-12 bg-white text-gray-800 rounded shadow-lg w-40">
+                <Link
+                  to="/perfil"
+                  onClick={() => setOpen(false)}
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Mi perfil
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

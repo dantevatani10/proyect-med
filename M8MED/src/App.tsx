@@ -10,6 +10,7 @@ import NewSurgery from './pages/NewSurgery'
 import EditComplexity from './pages/EditComplexity'
 import Summary from './pages/Summary'
 import GeneralSummary from './pages/GeneralSummary'
+import PerfilUsuario from './pages/PerfilUsuario'
 import ProtectedRoute from './routes/ProtectedRoute'
 
 export default function App() {
@@ -82,6 +83,15 @@ export default function App() {
           element={
             <ProtectedRoute rolPermitido="admin">
               <GeneralSummary />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/perfil"
+          element={
+            <ProtectedRoute rolPermitido={["admin", "medico"]}>
+              <PerfilUsuario />
             </ProtectedRoute>
           }
         />
