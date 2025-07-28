@@ -1,22 +1,59 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../store/useUserStore'
+import Navbar from '../components/Navbar'
 
 export default function Login() {
+  const [email, setEmail] = useState('')
+  const [rol, setRol] = useState<'admin' | 'medico'>('admin')
   const setUser = useUserStore((state) => state.setUser)
   const navigate = useNavigate()
 
-  const loginAs = (rol: 'admin' | 'medico') => {
-    setUser({ nombre: 'Demo', rol })
-    navigate(rol === 'admin' ? '/admin' : '/medico')
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setUser({ email, rol })
+    // Redirige al dashboard correcto
+    if (rol === 'admin') {
+      navigate('/dashboard-admin')
+    } else {
+      navigate('/dashboard-medico')
+    }
   }
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
-      <div className="space-y-4 bg-white p-6 rounded shadow w-80 text-center">
-        <h1 className="text-xl font-bold">Bienvenido a M8MED</h1>
-        <button onClick={() => loginAs('admin')} className="btn">Entrar como Admin</button>
-        <button onClick={() => loginAs('medico')} className="btn">Entrar como Médico</button>
+    <>
+      <Navbar />
+      <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
+        <h1 className="text-2xl font-bold mb-4">Iniciar sesión</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium">Email</label>
+            <input
+              type="email"
+              className="input w-full"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium">Rol</label>
+            <select
+              value={rol}
+              onChange={(e) => setRol(e.target.value as 'admin' | 'medico')}
+              className="input w-full"
+            >
+              <option value="admin">Admin</option>
+              <option value="medico">Médico</option>
+            </select>
+          </div>
+
+          <button type="submit" className="btn">
+            Entrar
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   )
 }
