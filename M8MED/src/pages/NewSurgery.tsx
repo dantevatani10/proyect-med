@@ -4,6 +4,7 @@ import { useM8Store } from '../store/useM8Store'
 import { usePacienteStore } from '../store/usePacienteStore'
 import type { Paciente } from '../types/paciente'
 import Navbar from '../components/Navbar'
+import { v4 as uuidv4 } from 'uuid'
 
 export default function NewSurgery() {
   const navigate = useNavigate()
@@ -26,6 +27,8 @@ export default function NewSurgery() {
     imagen: '',
   })
 
+  const agregarPaciente = usePacienteStore((s) => s.agregarPaciente)
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const paciente = usarExistente
@@ -35,6 +38,28 @@ export default function NewSurgery() {
     if (!paciente || !paciente.nombre || !paciente.dni) {
       alert('Faltan datos del paciente')
       return
+    }
+
+    // Si se ingresó un paciente nuevo y no existe en el store, guardarlo
+    if (!usarExistente) {
+      const existe = pacientes.some((p) => p.dni === paciente.dni)
+      if (!existe) {
+        const [nombre, ...apRest] = paciente.nombre.trim().split(' ')
+        const nuevoPaciente: Paciente = {
+          id: uuidv4(),
+          nombre,
+          apellido: apRest.join(' '),
+          dni: paciente.dni,
+          telefono: '',
+          genero: 'otro',
+          email: '',
+          diagnostico: '',
+          antecedentes: '',
+          fechaNacimiento: '',
+          tratamiento: '',
+        }
+        agregarPaciente(nuevoPaciente)
+      }
     }
 
     agregarCirugia({
