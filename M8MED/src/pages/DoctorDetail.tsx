@@ -24,6 +24,12 @@ export default function DoctorDetail() {
   const [mesFiltro, setMesFiltro] = useState<number>(ahora.getMonth() + 1)
   const [anioFiltro, setAnioFiltro] = useState<number>(ahora.getFullYear())
 
+  // Preparamos una lista de años a elegir; aquí listamos los últimos 5 años
+  const anios = useMemo(() => {
+    const actual = new Date().getFullYear()
+    return [actual, actual - 1, actual - 2, actual - 3, actual - 4]
+  }, [])
+
   if (!doctor) {
     return (
       <div className="p-6">
@@ -62,12 +68,6 @@ export default function DoctorDetail() {
     { value: 11, label: 'Noviembre' },
     { value: 12, label: 'Diciembre' },
   ]
-
-  // Preparamos una lista de años a elegir; aquí listamos los últimos 5 años
-  const anios = useMemo(() => {
-    const actual = new Date().getFullYear()
-    return [actual, actual - 1, actual - 2, actual - 3, actual - 4]
-  }, [])
 
   return (
     <div className="p-6">
