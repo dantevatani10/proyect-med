@@ -5,12 +5,18 @@ import Calendar from '../components/Calendar'
 import { useM8Store } from '../store/useM8Store'
 import { useUserStore } from '../store/useUserStore'
 import { usePacienteStore } from '../store/usePacienteStore'
+import { useTurnoStore } from '../store/useTurnoStore'
+import FormPaciente from '../components/FormPaciente'
+import PatientDetail from './PatientDetail'
 
 export default function DashboardMedico() {
   const user = useUserStore((s) => s.user)
   const doctores = useM8Store((s) => s.doctores)
   const cirugias = useM8Store((s) => s.cirugias)
   const pacientesAll = usePacienteStore((s) => s.pacientes)
+  const turnosAll = useTurnoStore((s) => s.turnos)
+  const agregarTurno = useTurnoStore((s) => s.agregarTurno)
+  const eliminarTurno = useTurnoStore((s) => s.eliminarTurno)
 
   // Buscar el médico según el id del usuario. Si no existe, usar el primero.
   const doctor = useMemo(() => {
@@ -33,14 +39,23 @@ export default function DashboardMedico() {
     [pacientesAll, doctor.id]
   )
 
+  const turnosDoctor = useMemo(
+    () => turnosAll.filter((t) => t.doctorId === doctor.id),
+    [turnosAll, doctor.id]
+  )
+
   const [showPopup, setShowPopup] = useState(false)
+  const [addPatient, setAddPatient] = useState(false)
+  const [detailPatientId, setDetailPatientId] = useState<string | null>(null)
+  const [addTurno, setAddTurno] = useState(false)
+  const [nuevoTurno, setNuevoTurno] = useState({ pacienteId: '', fecha: '', hora: '' })
 
   const eventos = useMemo(
-    () =>
-      cirugiasDoctor.map((c) => ({
-        date: c.fecha,
-      })),
-    [cirugiasDoctor]
+    () => [
+      ...cirugiasDoctor.map((c) => ({ date: c.fecha })),
+      ...turnosDoctor.map((t) => ({ date: t.fecha })),
+    ],
+    [cirugiasDoctor, turnosDoctor]
   )
 
   const obtenerMonto = (c: (typeof cirugiasDoctor)[number]) => {
@@ -69,22 +84,58 @@ export default function DashboardMedico() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">Próximos turnos</h2>
+          <h2 className="text-xl font-semibold mb-2">Calendario</h2>
           <Calendar events={eventos} />
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">Mis pacientes</h2>
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-xl font-semibold">Mis turnos</h2>
+            <button className="btn" onClick={() => setAddTurno(true)}>+ Agendar turno</button>
+          </div>
+          {turnosDoctor.length === 0 ? (
+            <p className="text-slate-600">No hay turnos registrados.</p>
+          ) : (
+            <ul className="space-y-2">
+              {turnosDoctor.map((t) => {
+                const pac = pacientes.find((p) => p.id === t.pacienteId)
+                return (
+                  <li key={t.id} className="bg-white rounded shadow p-2 flex justify-between items-center">
+                    <span>
+                      {t.fecha} {t.hora} - {pac?.nombre} {pac?.apellido}
+                    </span>
+                    <button onClick={() => eliminarTurno(t.id)} className="text-red-600 hover:underline">
+                      Cancelar
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-xl font-semibold">Mis pacientes</h2>
+            <button className="btn" onClick={() => setAddPatient(true)}>+ Agregar</button>
+          </div>
           {pacientes.length === 0 ? (
             <p className="text-slate-600">Aún no tiene pacientes.</p>
           ) : (
-            <ul className="list-disc pl-5 space-y-1">
-              {pacientes.map((p, i) => (
-                <li key={i}>
-                  {p.nombre} {p.apellido}
-                </li>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {pacientes.map((p) => (
+                <div key={p.id} className="card hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-slate-800">
+                    {p.nombre} {p.apellido}
+                  </h3>
+                  <p className="text-sm text-slate-600">{p.telefono}</p>
+                  <p className="text-sm text-slate-600 mb-2">{p.email}</p>
+                  <button onClick={() => setDetailPatientId(p.id)} className="text-sky-600 hover:underline">
+                    Ver historial
+                  </button>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </div>
       </div>
@@ -119,6 +170,68 @@ export default function DashboardMedico() {
             </table>
           </div>
         )}
+      </Modal>
+
+      <Modal isOpen={addPatient} onClose={() => setAddPatient(false)}>
+        <FormPaciente doctorIdFixed={doctor.id} onFinish={() => setAddPatient(false)} />
+      </Modal>
+
+      <Modal isOpen={detailPatientId !== null} onClose={() => setDetailPatientId(null)}>
+        {detailPatientId && <PatientDetail pacienteId={detailPatientId} />}
+      </Modal>
+
+      <Modal isOpen={addTurno} onClose={() => setAddTurno(false)}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            if (!nuevoTurno.pacienteId) return
+            agregarTurno({
+              doctorId: doctor.id,
+              pacienteId: nuevoTurno.pacienteId,
+              fecha: nuevoTurno.fecha,
+              hora: nuevoTurno.hora,
+            })
+            setNuevoTurno({ pacienteId: '', fecha: '', hora: '' })
+            setAddTurno(false)
+          }}
+          className="space-y-4"
+        >
+          <select
+            name="pacienteId"
+            value={nuevoTurno.pacienteId}
+            onChange={(e) => setNuevoTurno({ ...nuevoTurno, pacienteId: e.target.value })}
+            className="input w-full"
+            required
+          >
+            <option value="" disabled>
+              Seleccione paciente
+            </option>
+            {pacientes.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.nombre} {p.apellido}
+              </option>
+            ))}
+          </select>
+          <input
+            type="date"
+            name="fecha"
+            value={nuevoTurno.fecha}
+            onChange={(e) => setNuevoTurno({ ...nuevoTurno, fecha: e.target.value })}
+            className="input w-full"
+            required
+          />
+          <input
+            type="time"
+            name="hora"
+            value={nuevoTurno.hora}
+            onChange={(e) => setNuevoTurno({ ...nuevoTurno, hora: e.target.value })}
+            className="input w-full"
+            required
+          />
+          <button type="submit" className="btn w-full">
+            Guardar turno
+          </button>
+        </form>
       </Modal>
     </>
   )
