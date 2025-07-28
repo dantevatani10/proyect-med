@@ -37,6 +37,10 @@ type M8Store = {
   agregarCirugia: (data: Omit<Surgery, 'id' | 'valorBase'>) => void
   editarComplejidad: (nivel: number, valor: number) => void
   agregarDoctor: (data: Omit<Doctor, 'sueldo' | 'activo'>) => void
+  editarDoctor: (
+    id: string,
+    data: Omit<Doctor, 'id' | 'sueldo' | 'activo'>
+  ) => void
   cambiarEstadoDoctor: (id: string, activo: boolean) => void
 }
 
@@ -116,6 +120,13 @@ export const useM8Store = create<M8Store>()(
             ...state.doctores,
             { ...data, sueldo: 0, activo: true },
           ],
+        }))
+      },
+      editarDoctor: (id, data) => {
+        set((state) => ({
+          doctores: state.doctores.map((d) =>
+            d.id === id ? { ...d, ...data } : d
+          ),
         }))
       },
       cambiarEstadoDoctor: (id, activo) => {

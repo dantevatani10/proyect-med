@@ -21,6 +21,7 @@ export default function DashboardAdmin() {
   const [showGeneral, setShowGeneral] = useState(false)
   const [showAddDoctor, setShowAddDoctor] = useState(false)
   const [detailDoctorId, setDetailDoctorId] = useState<string | null>(null)
+  const [editDoctorId, setEditDoctorId] = useState<string | null>(null)
 
   const contarParticipacionesDelMes = (doctorId: string) => {
     const ahora = new Date()
@@ -84,6 +85,12 @@ export default function DashboardAdmin() {
                   Ver detalle
                 </button>
                 <button
+                  onClick={() => setEditDoctorId(doc.id)}
+                  className="text-sky-600 hover:underline mt-2 ml-4 inline-block"
+                >
+                  Editar
+                </button>
+                <button
                   onClick={() => cambiarEstadoDoctor(doc.id, false)}
                   className="text-red-600 hover:underline mt-2 ml-4 inline-block"
                 >
@@ -138,7 +145,16 @@ export default function DashboardAdmin() {
       </Modal>
 
       <Modal isOpen={showAddDoctor} onClose={() => setShowAddDoctor(false)}>
-        <FormDoctor onDoctorAdded={() => setShowAddDoctor(false)} />
+        <FormDoctor onFinish={() => setShowAddDoctor(false)} />
+      </Modal>
+
+      <Modal isOpen={editDoctorId !== null} onClose={() => setEditDoctorId(null)}>
+        {editDoctorId && (
+          <FormDoctor
+            doctor={doctores.find((d) => d.id === editDoctorId)}
+            onFinish={() => setEditDoctorId(null)}
+          />
+        )}
       </Modal>
     </>
   )
