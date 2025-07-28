@@ -4,16 +4,17 @@ import DashboardAdmin from './pages/DashboardAdmin'
 import DashboardMedico from './pages/DashboardMedico'
 import Pacientes from './pages/Pacientes'
 import AgregarPaciente from './pages/AgregarPaciente'
-import ProtectedRoute from './routes/ProtectedRoute' // IMPORTADO Y APLICADO
+import DoctorDetail from './pages/DoctorDetail'
+import ProtectedRoute from './routes/ProtectedRoute'
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Ruta Pública */}
+        {/* Ruta pública */}
         <Route path="/" element={<Login />} />
 
-        {/* Rutas Protegidas de Admin */}
+        {/* Rutas protegidas para admin */}
         <Route
           path="/dashboard-admin"
           element={
@@ -38,8 +39,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/medicos/:id"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <DoctorDetail />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Ruta Protegida de Médico */}
+        {/* Ruta protegida para médicos */}
         <Route
           path="/dashboard-medico"
           element={
