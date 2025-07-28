@@ -7,6 +7,7 @@ import { useUserStore } from '../store/useUserStore'
 import { usePacienteStore } from '../store/usePacienteStore'
 import { useTurnoStore } from '../store/useTurnoStore'
 import FormPaciente from '../components/FormPaciente'
+import FormTurno from '../components/FormTurno'
 import PatientDetail from './PatientDetail'
 
 export default function DashboardMedico() {
@@ -15,7 +16,6 @@ export default function DashboardMedico() {
   const cirugias = useM8Store((s) => s.cirugias)
   const pacientesAll = usePacienteStore((s) => s.pacientes)
   const turnosAll = useTurnoStore((s) => s.turnos)
-  const agregarTurno = useTurnoStore((s) => s.agregarTurno)
   const eliminarTurno = useTurnoStore((s) => s.eliminarTurno)
 
   // Buscar el médico según el id del usuario. Si no existe, usar el primero.
@@ -48,7 +48,7 @@ export default function DashboardMedico() {
   const [addPatient, setAddPatient] = useState(false)
   const [detailPatientId, setDetailPatientId] = useState<string | null>(null)
   const [addTurno, setAddTurno] = useState(false)
-  const [nuevoTurno, setNuevoTurno] = useState({ pacienteId: '', fecha: '', hora: '' })
+  const [editTurnoId, setEditTurnoId] = useState<string | null>(null)
 
   const eventos = useMemo(
     () => [
@@ -100,13 +100,27 @@ export default function DashboardMedico() {
               {turnosDoctor.map((t) => {
                 const pac = pacientes.find((p) => p.id === t.pacienteId)
                 return (
-                  <li key={t.id} className="bg-white rounded shadow p-2 flex justify-between items-center">
+                  <li
+                    key={t.id}
+                    className="bg-white rounded shadow p-2 flex justify-between items-center"
+                  >
                     <span>
                       {t.fecha} {t.hora} - {pac?.nombre} {pac?.apellido}
                     </span>
-                    <button onClick={() => eliminarTurno(t.id)} className="text-red-600 hover:underline">
-                      Cancelar
-                    </button>
+                    <div className="space-x-4">
+                      <button
+                        onClick={() => setEditTurnoId(t.id)}
+                        className="text-sky-600 hover:underline"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => eliminarTurno(t.id)}
+                        className="text-red-600 hover:underline"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
                   </li>
                 )
               })}
@@ -181,57 +195,20 @@ export default function DashboardMedico() {
       </Modal>
 
       <Modal isOpen={addTurno} onClose={() => setAddTurno(false)}>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            if (!nuevoTurno.pacienteId) return
-            agregarTurno({
-              doctorId: doctor.id,
-              pacienteId: nuevoTurno.pacienteId,
-              fecha: nuevoTurno.fecha,
-              hora: nuevoTurno.hora,
-            })
-            setNuevoTurno({ pacienteId: '', fecha: '', hora: '' })
-            setAddTurno(false)
-          }}
-          className="space-y-4"
-        >
-          <select
-            name="pacienteId"
-            value={nuevoTurno.pacienteId}
-            onChange={(e) => setNuevoTurno({ ...nuevoTurno, pacienteId: e.target.value })}
-            className="input w-full"
-            required
-          >
-            <option value="" disabled>
-              Seleccione paciente
-            </option>
-            {pacientes.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nombre} {p.apellido}
-              </option>
-            ))}
-          </select>
-          <input
-            type="date"
-            name="fecha"
-            value={nuevoTurno.fecha}
-            onChange={(e) => setNuevoTurno({ ...nuevoTurno, fecha: e.target.value })}
-            className="input w-full"
-            required
+        <FormTurno
+          doctorIdFixed={doctor.id}
+          onFinish={() => setAddTurno(false)}
+        />
+      </Modal>
+
+      <Modal isOpen={editTurnoId !== null} onClose={() => setEditTurnoId(null)}>
+        {editTurnoId && (
+          <FormTurno
+            turno={turnosDoctor.find((t) => t.id === editTurnoId)}
+            doctorIdFixed={doctor.id}
+            onFinish={() => setEditTurnoId(null)}
           />
-          <input
-            type="time"
-            name="hora"
-            value={nuevoTurno.hora}
-            onChange={(e) => setNuevoTurno({ ...nuevoTurno, hora: e.target.value })}
-            className="input w-full"
-            required
-          />
-          <button type="submit" className="btn w-full">
-            Guardar turno
-          </button>
-        </form>
+        )}
       </Modal>
     </>
   )

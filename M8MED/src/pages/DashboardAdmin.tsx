@@ -47,12 +47,13 @@ export default function DashboardAdmin() {
         <div className="max-w-6xl mx-auto p-6">
           <h1 className="text-3xl font-semibold mb-6">Panel de Admin</h1>
           <div className="flex flex-wrap gap-4 mb-8">
-            <Link to="/pacientes" className="btn">
-              Ver pacientes
-            </Link>
-            <button onClick={() => setShowAddDoctor(true)} className="btn">
-              Agregar médico
-            </button>
+          <Link to="/pacientes" className="btn">
+            Ver pacientes
+          </Link>
+          <Link to="/turnos" className="btn">Gestionar turnos</Link>
+          <button onClick={() => setShowAddDoctor(true)} className="btn">
+            Agregar médico
+          </button>
             <button onClick={() => setShowComplexity(true)} className="btn">
               Gestionar complejidad
             </button>

@@ -12,6 +12,7 @@ export type Turno = {
 interface TurnoState {
   turnos: Turno[]
   agregarTurno: (t: Omit<Turno, 'id'>) => void
+  editarTurno: (id: string, data: Omit<Turno, 'id'>) => void
   eliminarTurno: (id: string) => void
 }
 
@@ -27,6 +28,12 @@ export const useTurnoStore = create<TurnoState>((set) => ({
   ],
   agregarTurno: (t) =>
     set((state) => ({ turnos: [...state.turnos, { ...t, id: uuidv4() }] })),
+  editarTurno: (id, data) =>
+    set((state) => ({
+      turnos: state.turnos.map((tu) =>
+        tu.id === id ? { ...tu, ...data } : tu
+      ),
+    })),
   eliminarTurno: (id) =>
     set((state) => ({ turnos: state.turnos.filter((tu) => tu.id !== id) })),
 }))

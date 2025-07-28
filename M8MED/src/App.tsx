@@ -12,6 +12,7 @@ import Summary from './pages/Summary'
 import GeneralSummary from './pages/GeneralSummary'
 import PerfilUsuario from './pages/PerfilUsuario'
 import ProtectedRoute from './routes/ProtectedRoute'
+import Turnos from './pages/Turnos'
 
 export default function App() {
   return (
@@ -43,6 +44,14 @@ export default function App() {
           element={
             <ProtectedRoute rolPermitido="admin">
               <AgregarPaciente />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/turnos"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <Turnos />
             </ProtectedRoute>
           }
         />
