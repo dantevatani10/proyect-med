@@ -4,23 +4,25 @@ import type { Paciente } from '../types/paciente'
 import { v4 as uuidv4 } from 'uuid'
 
 type FormPacienteProps = {
-  onPacienteAgregado: () => void;
+  onFinish: () => void
+  paciente?: Paciente
 }
 
-export default function FormPaciente({ onPacienteAgregado }: FormPacienteProps) {
+export default function FormPaciente({ onFinish, paciente }: FormPacienteProps) {
   const agregarPaciente = usePacienteStore((state) => state.agregarPaciente)
+  const editarPaciente = usePacienteStore((state) => state.editarPaciente)
 
   const [form, setForm] = useState<Omit<Paciente, 'id'>>({
-    nombre: '',
-    apellido: '',
-    dni: '',
-    telefono: '',
-    genero: 'masculino',
-    email: '',
-    diagnostico: '',
-    antecedentes: '',
-    fechaNacimiento: '',
-    tratamiento: ''
+    nombre: paciente?.nombre ?? '',
+    apellido: paciente?.apellido ?? '',
+    dni: paciente?.dni ?? '',
+    telefono: paciente?.telefono ?? '',
+    genero: paciente?.genero ?? 'masculino',
+    email: paciente?.email ?? '',
+    diagnostico: paciente?.diagnostico ?? '',
+    antecedentes: paciente?.antecedentes ?? '',
+    fechaNacimiento: paciente?.fechaNacimiento ?? '',
+    tratamiento: paciente?.tratamiento ?? '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -30,12 +32,16 @@ export default function FormPaciente({ onPacienteAgregado }: FormPacienteProps) 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const nuevoPaciente: Paciente = {
-      ...form,
-      id: uuidv4()
+    if (paciente) {
+      editarPaciente(paciente.id, form)
+    } else {
+      const nuevoPaciente: Paciente = {
+        ...form,
+        id: uuidv4(),
+      }
+      agregarPaciente(nuevoPaciente)
     }
-    agregarPaciente(nuevoPaciente)
-    onPacienteAgregado(); // <-- USA EL CALLBACK
+    onFinish()
   }
 
   return (

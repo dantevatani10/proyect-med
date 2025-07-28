@@ -5,6 +5,7 @@ import DashboardAdmin from './pages/DashboardAdmin'
 import DashboardMedico from './pages/DashboardMedico'
 import Pacientes from './pages/Pacientes'
 import AgregarPaciente from './pages/AgregarPaciente'
+import EditarPaciente from './pages/EditarPaciente'
 import NewSurgery from './pages/NewSurgery'
 import EditComplexity from './pages/EditComplexity'
 import Summary from './pages/Summary'
@@ -41,6 +42,14 @@ export default function App() {
           element={
             <ProtectedRoute rolPermitido="admin">
               <AgregarPaciente />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pacientes/editar/:id"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <EditarPaciente />
             </ProtectedRoute>
           }
         />

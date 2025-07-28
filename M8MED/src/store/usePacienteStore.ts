@@ -5,6 +5,8 @@ type State = {
   pacientes: Paciente[]
   setPacientes: (data: Paciente[]) => void
   agregarPaciente: (nuevo: Paciente) => void
+  editarPaciente: (id: string, data: Omit<Paciente, 'id'>) => void
+  eliminarPaciente: (id: string) => void
 }
 
 export const usePacienteStore = create<State>((set) => ({
@@ -39,4 +41,14 @@ export const usePacienteStore = create<State>((set) => ({
   setPacientes: (data) => set({ pacientes: data }),
   agregarPaciente: (nuevo) =>
     set((state) => ({ pacientes: [...state.pacientes, nuevo] })),
+  editarPaciente: (id, data) =>
+    set((state) => ({
+      pacientes: state.pacientes.map((p) =>
+        p.id === id ? { ...p, ...data } : p
+      ),
+    })),
+  eliminarPaciente: (id) =>
+    set((state) => ({
+      pacientes: state.pacientes.filter((p) => p.id !== id),
+    })),
 }))

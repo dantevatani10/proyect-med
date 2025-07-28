@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 export default function Pacientes() {
   const pacientes = usePacienteStore((state) => state.pacientes)
+  const eliminarPaciente = usePacienteStore((s) => s.eliminarPaciente)
 
   return (
     <>
@@ -24,6 +25,7 @@ export default function Pacientes() {
                 <th className="px-4 py-2">Teléfono</th>
                 <th className="px-4 py-2">Email</th>
                 <th className="px-4 py-2">Género</th>
+                <th className="px-4 py-2">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -35,6 +37,20 @@ export default function Pacientes() {
                   <td className="px-4 py-2">{paciente.telefono}</td>
                   <td className="px-4 py-2">{paciente.email}</td>
                   <td className="px-4 py-2 capitalize">{paciente.genero}</td>
+                  <td className="px-4 py-2 space-x-2">
+                    <Link
+                      to={`/pacientes/editar/${paciente.id}`}
+                      className="text-sky-600 hover:underline"
+                    >
+                      Editar
+                    </Link>
+                    <button
+                      onClick={() => eliminarPaciente(paciente.id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Eliminar
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -44,3 +60,4 @@ export default function Pacientes() {
     </>
   )
 }
+

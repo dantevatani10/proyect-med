@@ -19,7 +19,7 @@ export default function AgregarPaciente() {
                 ← Volver
             </button>
         </div>
-        <FormPaciente onPacienteAgregado={handlePacienteGuardado} />
+        <FormPaciente onFinish={handlePacienteGuardado} />
       </div>
     </>
   )
