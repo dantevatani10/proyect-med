@@ -48,9 +48,14 @@ export default function PerfilUsuario() {
   return (
     <>
       <Navbar />
-      <div className="max-w-md mx-auto p-6 pt-20">
-        <h1 className="text-2xl font-bold mb-4">Mi perfil</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Mi perfil</h1>
+        </div>
+      </header>
+      <main>
+        <div className="mx-auto max-w-md px-4 py-6 sm:px-6 lg:px-8">
+          <form onSubmit={handleSubmit} className="space-y-4">
           <input
             name="nombre"
             value={form.nombre}
@@ -96,7 +101,8 @@ export default function PerfilUsuario() {
             Guardar
           </button>
         </form>
-      </div>
+        </div>
+      </main>
     </>
   )
 }

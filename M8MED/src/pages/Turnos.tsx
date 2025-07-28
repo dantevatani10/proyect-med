@@ -34,13 +34,18 @@ export default function Turnos() {
   return (
     <>
       <Navbar />
-      <div className="max-w-5xl mx-auto p-6 pt-20">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Turnos</h1>
-          <button className="btn" onClick={() => setAddTurno(true)}>
-            + Agregar turno
-          </button>
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Turnos</h1>
         </div>
+      </header>
+      <main>
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <div className="flex justify-end mb-4">
+            <button className="btn" onClick={() => setAddTurno(true)}>
+              + Agregar turno
+            </button>
+          </div>
         {turnos.length === 0 ? (
           <p>No hay turnos registrados.</p>
         ) : (
@@ -86,7 +91,8 @@ export default function Turnos() {
             </table>
           </div>
         )}
-      </div>
+        </div>
+      </main>
 
       <Modal isOpen={addTurno} onClose={() => setAddTurno(false)}>
         <FormTurno onFinish={() => setAddTurno(false)} />

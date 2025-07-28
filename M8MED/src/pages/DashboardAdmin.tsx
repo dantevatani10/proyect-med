@@ -43,9 +43,13 @@ export default function DashboardAdmin() {
   return (
     <>
       <Navbar />
-      <div className="pt-20 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100">
-        <div className="max-w-6xl mx-auto p-6">
-          <h1 className="text-3xl font-semibold mb-6">Panel de Admin</h1>
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Panel de Admin</h1>
+        </div>
+      </header>
+      <main>
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 bg-gradient-to-br from-sky-50 to-indigo-100 min-h-screen">
           <div className="flex flex-wrap gap-4 mb-8">
           <Link to="/pacientes" className="btn">
             Ver pacientes
@@ -129,11 +133,11 @@ export default function DashboardAdmin() {
             </>
           )}
 
-          {pacientes.length > 0 && (
-            <>
-              <h2 className="text-2xl font-semibold mt-10 mb-4">Pacientes</h2>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {pacientes.map((p) => (
+        {pacientes.length > 0 && (
+          <>
+            <h2 className="text-2xl font-semibold mt-10 mb-4">Pacientes</h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {pacientes.map((p) => (
                   <div
                     key={p.id}
                     className="card hover:shadow-md transition-shadow"
@@ -155,7 +159,7 @@ export default function DashboardAdmin() {
             </>
           )}
         </div>
-      </div>
+      </main>
 
       {/* Modales */}
       <Modal isOpen={showComplexity} onClose={() => setShowComplexity(false)}>

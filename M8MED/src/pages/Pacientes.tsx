@@ -20,11 +20,16 @@ export default function Pacientes() {
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto p-6 pt-20">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Pacientes</h1>
-          <Link to="/agregar-paciente" className="btn">+ Agregar Paciente</Link>
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Pacientes</h1>
         </div>
+      </header>
+      <main>
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <div className="flex justify-end mb-4">
+            <Link to="/agregar-paciente" className="btn">+ Agregar Paciente</Link>
+          </div>
 
         <div className="bg-white shadow rounded-lg overflow-x-auto">
           <table className="min-w-full text-sm">
@@ -69,7 +74,8 @@ export default function Pacientes() {
             </tbody>
           </table>
         </div>
-      </div>
+        </div>
+      </main>
     </>
   )
 }

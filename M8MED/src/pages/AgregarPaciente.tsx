@@ -12,15 +12,21 @@ export default function AgregarPaciente() {
   return (
     <>
       <Navbar />
-      <div className="max-w-2xl mx-auto p-6">
-        <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold">Agregar Paciente</h1>
-            <button onClick={() => navigate('/pacientes')} className="text-blue-600 hover:underline">
-                ← Volver
-            </button>
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Agregar Paciente</h1>
         </div>
-        <FormPaciente onFinish={handlePacienteGuardado} />
-      </div>
+      </header>
+      <main>
+        <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 lg:px-8">
+          <div className="flex justify-end mb-4">
+            <button onClick={() => navigate('/pacientes')} className="text-blue-600 hover:underline">
+              ← Volver
+            </button>
+          </div>
+          <FormPaciente onFinish={handlePacienteGuardado} />
+        </div>
+      </main>
     </>
   )
 }

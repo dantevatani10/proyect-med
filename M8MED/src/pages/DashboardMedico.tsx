@@ -74,10 +74,15 @@ export default function DashboardMedico() {
   return (
     <>
       <Navbar />
-      <div className="pt-20 max-w-4xl mx-auto p-6 space-y-8">
-        <h1 className="text-3xl font-semibold">
-          Bienvenido, {doctor.nombre}
-        </h1>
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Bienvenido, {doctor.nombre}
+          </h1>
+        </div>
+      </header>
+      <main>
+        <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 space-y-8">
 
         <div>
           <div
@@ -139,26 +144,27 @@ export default function DashboardMedico() {
             <h2 className="text-xl font-semibold">Mis pacientes</h2>
             <button className="btn" onClick={() => setAddPatient(true)}>+ Agregar</button>
           </div>
-          {pacientes.length === 0 ? (
-            <p className="text-slate-600">Aún no tiene pacientes.</p>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {pacientes.map((p) => (
-                <div key={p.id} className="card hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-slate-800">
-                    {p.nombre} {p.apellido}
-                  </h3>
-                  <p className="text-sm text-slate-600">{p.telefono}</p>
-                  <p className="text-sm text-slate-600 mb-2">{p.email}</p>
-                  <button onClick={() => setDetailPatientId(p.id)} className="text-sky-600 hover:underline">
-                    Ver historial
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+        {pacientes.length === 0 ? (
+          <p className="text-slate-600">Aún no tiene pacientes.</p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {pacientes.map((p) => (
+              <div key={p.id} className="card hover:shadow-md transition-shadow">
+                <h3 className="text-lg font-semibold text-slate-800">
+                  {p.nombre} {p.apellido}
+                </h3>
+                <p className="text-sm text-slate-600">{p.telefono}</p>
+                <p className="text-sm text-slate-600 mb-2">{p.email}</p>
+                <button onClick={() => setDetailPatientId(p.id)} className="text-sky-600 hover:underline">
+                  Ver historial
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
         </div>
-      </div>
+        </div>
+      </main>
 
       <Modal isOpen={showPopup} onClose={() => setShowPopup(false)}>
         <h2 className="text-xl font-bold mb-4">Ingresos por cirugía</h2>
