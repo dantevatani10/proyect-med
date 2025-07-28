@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../store/useUserStore'
-import Navbar from '../components/Navbar'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -11,8 +10,7 @@ export default function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setUser({ email, rol })
-    // Redirige al dashboard correcto
+    setUser({ email, rol }) // <-- CORREGIDO: Pasa el objeto { email, rol }
     if (rol === 'admin') {
       navigate('/dashboard-admin')
     } else {
@@ -21,11 +19,10 @@ export default function Login() {
   }
 
   return (
-    <>
-      <Navbar />
-      <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
-        <h1 className="text-2xl font-bold mb-4">Iniciar sesión</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="max-w-md w-full mx-auto p-8 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold mb-6 text-center">Iniciar sesión</h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium">Email</label>
             <input
@@ -49,11 +46,11 @@ export default function Login() {
             </select>
           </div>
 
-          <button type="submit" className="btn">
+          <button type="submit" className="btn w-full">
             Entrar
           </button>
         </form>
       </div>
-    </>
+    </div>
   )
 }

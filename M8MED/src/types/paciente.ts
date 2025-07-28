@@ -10,6 +10,3 @@ export type Paciente = {
   fechaNacimiento: string // formato ISO
   tratamiento: string
 }
-
-// ✅ SOLUCIÓN: agregá una exportación explícita (requerido por Vite/ESM)
-export default {} 
