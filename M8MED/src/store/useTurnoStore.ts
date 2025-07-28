@@ -7,6 +7,8 @@ export type Turno = {
   pacienteId: string
   fecha: string
   hora: string
+  tipo: 'quirurgico' | 'consultorio'
+  descripcion: string
 }
 
 interface TurnoState {
@@ -24,6 +26,8 @@ export const useTurnoStore = create<TurnoState>((set) => ({
       pacienteId: 'pac1',
       fecha: '2025-08-01',
       hora: '10:00',
+      tipo: 'consultorio',
+      descripcion: 'Control de rutina',
     },
   ],
   agregarTurno: (t) =>

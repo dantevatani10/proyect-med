@@ -34,8 +34,10 @@ export default function Turnos() {
                 <tr>
                   <th className="px-4 py-2">Fecha</th>
                   <th className="px-4 py-2">Hora</th>
+                  <th className="px-4 py-2">Tipo</th>
                   <th className="px-4 py-2">Paciente</th>
                   <th className="px-4 py-2">Médico</th>
+                  <th className="px-4 py-2">Descripción</th>
                   <th className="px-4 py-2">Acciones</th>
                 </tr>
               </thead>
@@ -47,12 +49,14 @@ export default function Turnos() {
                     <tr key={t.id} className="border-b hover:bg-gray-50">
                       <td className="px-4 py-2">{t.fecha}</td>
                       <td className="px-4 py-2">{t.hora}</td>
+                      <td className="px-4 py-2 capitalize">{t.tipo}</td>
                       <td className="px-4 py-2">
                         {pac?.nombre} {pac?.apellido}
                       </td>
                       <td className="px-4 py-2">
                         {doc?.nombre} {doc?.apellido}
                       </td>
+                      <td className="px-4 py-2">{t.descripcion}</td>
                       <td className="px-4 py-2 space-x-2">
                         <button
                           onClick={() => setEditTurnoId(t.id)}

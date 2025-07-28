@@ -20,6 +20,8 @@ export default function FormTurno({ onFinish, turno, doctorIdFixed }: Props) {
     pacienteId: turno?.pacienteId ?? '',
     fecha: turno?.fecha ?? '',
     hora: turno?.hora ?? '',
+    tipo: turno?.tipo ?? 'consultorio',
+    descripcion: turno?.descripcion ?? '',
   })
 
   const pacientes = doctorIdFixed
@@ -27,7 +29,9 @@ export default function FormTurno({ onFinish, turno, doctorIdFixed }: Props) {
     : pacientesAll
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target
     setForm({ ...form, [name]: value })
@@ -90,6 +94,23 @@ export default function FormTurno({ onFinish, turno, doctorIdFixed }: Props) {
         onChange={handleChange}
         className="input w-full"
         required
+      />
+      <select
+        name="tipo"
+        value={form.tipo}
+        onChange={handleChange}
+        className="input w-full"
+        required
+      >
+        <option value="consultorio">Consultorio</option>
+        <option value="quirurgico">Quirúrgico</option>
+      </select>
+      <textarea
+        name="descripcion"
+        value={form.descripcion}
+        onChange={handleChange}
+        className="input w-full"
+        placeholder="Descripción breve"
       />
       <button type="submit" className="btn w-full">
         Guardar turno

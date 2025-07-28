@@ -105,7 +105,9 @@ export default function DashboardMedico() {
                     className="bg-white rounded shadow p-2 flex justify-between items-center"
                   >
                     <span>
-                      {t.fecha} {t.hora} - {pac?.nombre} {pac?.apellido}
+                      {t.fecha} {t.hora} - {pac?.nombre} {pac?.apellido} (
+                      {t.tipo})
+                      {t.descripcion ? ` - ${t.descripcion}` : ''}
                     </span>
                     <div className="space-x-4">
                       <button
