@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useM8Store } from '../store/useM8Store'
+import { usePacienteStore } from '../store/usePacienteStore'
+import type { Paciente } from '../types/paciente'
 import Navbar from '../components/Navbar'
 
 export default function NewSurgery() {
   const navigate = useNavigate()
   const agregarCirugia = useM8Store((s) => s.agregarCirugia)
   const doctores = useM8Store((s) => s.doctores || [])
-  const pacientes = useM8Store((s) => s.pacientes || [])
+  const pacientes = usePacienteStore((s) => s.pacientes)
 
   const [usarExistente, setUsarExistente] = useState(true)
   const [pacienteId, setPacienteId] = useState('')
@@ -78,7 +80,7 @@ export default function NewSurgery() {
               >
                 <option value="">-- Seleccioná un paciente --</option>
                 {Array.isArray(pacientes) &&
-                  pacientes.map((p) => (
+                  pacientes.map((p: Paciente) => (
                     <option key={p.id} value={p.id}>
                       {p.nombre} - DNI: {p.dni}
                     </option>

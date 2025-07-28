@@ -37,7 +37,7 @@ type M8Store = {
 
 export const useM8Store = create<M8Store>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       // Lista inicial de médicos activos
       doctores: [
         {

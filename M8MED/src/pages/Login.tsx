@@ -24,9 +24,9 @@ export default function Login() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="max-w-md w-full mx-auto p-8 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Iniciar sesión</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-200">
+      <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-lg">
+        <h1 className="text-3xl font-semibold mb-6 text-center">Iniciar sesión</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium">Email</label>

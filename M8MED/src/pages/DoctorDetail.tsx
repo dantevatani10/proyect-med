@@ -24,24 +24,6 @@ export default function DoctorDetail() {
   const [mesFiltro, setMesFiltro] = useState<number>(ahora.getMonth() + 1)
   const [anioFiltro, setAnioFiltro] = useState<number>(ahora.getFullYear())
 
-  if (!doctor) {
-    return (
-      <div className="p-6">
-        <p>Médico no encontrado.</p>
-      </div>
-    )
-  }
-
-  // Filtramos las cirugías del médico según mes y año seleccionados
-  const cirugiasDelMedico = cirugias.filter((c) => {
-    if (c.doctorId !== doctor.id) return false
-    const fecha = new Date(`${c.fecha}T${c.hora}`)
-    return (
-      fecha.getMonth() + 1 === mesFiltro &&
-      fecha.getFullYear() === anioFiltro
-    )
-  })
-
   // Calcula el monto asignado a este médico para cada cirugía usando valorBase
   const obtenerMonto = (c: Surgery) => {
     const partes = 1 + c.ayudantes.length
@@ -68,6 +50,24 @@ export default function DoctorDetail() {
     const actual = new Date().getFullYear()
     return [actual, actual - 1, actual - 2, actual - 3, actual - 4]
   }, [])
+
+  if (!doctor) {
+    return (
+      <div className="p-6">
+        <p>Médico no encontrado.</p>
+      </div>
+    )
+  }
+
+  // Filtramos las cirugías del médico según mes y año seleccionados
+  const cirugiasDelMedico = cirugias.filter((c) => {
+    if (c.doctorId !== doctor.id) return false
+    const fecha = new Date(`${c.fecha}T${c.hora}`)
+    return (
+      fecha.getMonth() + 1 === mesFiltro &&
+      fecha.getFullYear() === anioFiltro
+    )
+  })
 
   return (
     <div className="p-6">
