@@ -8,7 +8,12 @@
 }
 
 .btn {
-  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors;
+  @apply bg-gradient-to-r from-sky-600 to-indigo-600 text-white px-4 py-2 rounded-md hover:from-sky-700 hover:to-indigo-700 transition-colors;
+}
+
+/* Tarjetas reutilizables */
+.card {
+  @apply bg-white rounded-xl shadow p-4;
 }
 
 /* Fondo y texto general */

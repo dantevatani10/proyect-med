@@ -33,64 +33,50 @@ export default function DashboardAdmin() {
   return (
     <>
       <Navbar />
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-4">Panel de Admin</h1>
-        <ul className="space-y-2 mb-6">
-          <li>
-            <Link to="/pacientes" className="text-blue-600 underline">
+      <div className="pt-20 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100">
+        <div className="max-w-6xl mx-auto p-6">
+          <h1 className="text-3xl font-semibold mb-6">Panel de Admin</h1>
+          <div className="flex flex-wrap gap-4 mb-8">
+            <Link to="/pacientes" className="btn">
               Ver pacientes
             </Link>
-          </li>
-          <li>
-            <button
-              onClick={() => setShowComplexity(true)}
-              className="text-blue-600 underline"
-            >
+            <button onClick={() => setShowComplexity(true)} className="btn">
               Gestionar complejidad
             </button>
-          </li>
-          <li>
-            <button
-              onClick={() => setShowSummary(true)}
-              className="text-blue-600 underline"
-            >
+            <button onClick={() => setShowSummary(true)} className="btn">
               Resumen mensual
             </button>
-          </li>
-          <li>
-            <button
-              onClick={() => setShowGeneral(true)}
-              className="text-blue-600 underline"
-            >
+            <button onClick={() => setShowGeneral(true)} className="btn">
               Resumen general
             </button>
-          </li>
-        </ul>
+          </div>
 
-        <h2 className="text-xl font-semibold mb-4">Médicos activos</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {doctoresActivos.map((doc) => (
-            <div key={doc.id} className="bg-white shadow rounded p-4">
-              <h3 className="text-lg font-semibold">{doc.nombre}</h3>
-              <p className="text-sm text-gray-700">{doc.email}</p>
-              <p className="text-sm text-gray-700">
-                Especialidad: {doc.especialidad}
-              </p>
-              <p className="text-sm text-gray-700">
-                Participaciones del mes:{' '}
-                {contarParticipacionesDelMes(doc.id)}
-              </p>
-              <p className="text-sm text-gray-700">
-                Sueldo actual: ${doc.sueldo.toFixed(2)}
-              </p>
-              <Link
-                to={`/medicos/${doc.id}`}
-                className="text-blue-600 underline mt-2 inline-block"
-              >
-                Ver detalle
-              </Link>
-            </div>
-          ))}
+          <h2 className="text-2xl font-semibold mb-4">Médicos activos</h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {doctoresActivos.map((doc) => (
+              <div key={doc.id} className="card hover:shadow-md transition-shadow">
+                <h3 className="text-lg font-semibold text-slate-800">
+                  {doc.nombre}
+                </h3>
+                <p className="text-sm text-slate-600">{doc.email}</p>
+                <p className="text-sm text-slate-600">
+                  Especialidad: {doc.especialidad}
+                </p>
+                <p className="text-sm text-slate-600">
+                  Participaciones del mes: {contarParticipacionesDelMes(doc.id)}
+                </p>
+                <p className="text-sm text-slate-600">
+                  Sueldo actual: ${doc.sueldo.toFixed(2)}
+                </p>
+                <Link
+                  to={`/medicos/${doc.id}`}
+                  className="text-sky-600 hover:underline mt-2 inline-block"
+                >
+                  Ver detalle
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -130,7 +116,7 @@ function Modal({
       onClick={onClose}
     >
       <div
-        className="bg-white p-4 max-w-full max-h-screen overflow-y-auto rounded shadow-lg"
+        className="bg-white p-6 w-full max-w-lg max-h-screen overflow-y-auto rounded-xl shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-end">
