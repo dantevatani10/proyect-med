@@ -10,6 +10,7 @@ import NewSurgery from './pages/NewSurgery'
 import EditComplexity from './pages/EditComplexity'
 import Summary from './pages/Summary'
 import GeneralSummary from './pages/GeneralSummary'
+import AgregarDoctor from './pages/AgregarDoctor'
 import PerfilUsuario from './pages/PerfilUsuario'
 import ProtectedRoute from './routes/ProtectedRoute'
 import Turnos from './pages/Turnos'
@@ -44,6 +45,14 @@ export default function App() {
           element={
             <ProtectedRoute rolPermitido="admin">
               <AgregarPaciente />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agregar-medico"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <AgregarDoctor />
             </ProtectedRoute>
           }
         />

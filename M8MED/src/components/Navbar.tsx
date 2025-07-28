@@ -26,6 +26,10 @@ export default function Navbar() {
           { name: 'Dashboard', href: '/dashboard-admin' },
           { name: 'Pacientes', href: '/pacientes' },
           { name: 'Turnos', href: '/turnos' },
+          { name: 'Nuevo médico', href: '/agregar-medico' },
+          { name: 'Complejidad', href: '/complejidad' },
+          { name: 'Resumen', href: '/resumen' },
+          { name: 'General', href: '/resumen/detalle' },
         ]
       : [{ name: 'Dashboard', href: '/dashboard-medico' }]
     : []

@@ -1,9 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { useM8Store } from '../store/useM8Store'
-import EditComplexity from './EditComplexity'
-import Summary from './Summary'
 import DoctorDetail from './DoctorDetail'
 import PatientDetail from './PatientDetail'
 import FormDoctor from '../components/FormDoctor'
@@ -19,9 +16,6 @@ export default function DashboardAdmin() {
   const doctoresSuspendidos = doctores.filter((d) => !d.activo)
 
   // Estados para abrir/cerrar modales
-  const [showComplexity, setShowComplexity] = useState(false)
-  const [showSummary, setShowSummary] = useState(false)
-  const [showAddDoctor, setShowAddDoctor] = useState(false)
   const [detailDoctorId, setDetailDoctorId] = useState<string | null>(null)
   const [editDoctorId, setEditDoctorId] = useState<string | null>(null)
   const [detailPatientId, setDetailPatientId] = useState<string | null>(null)
@@ -50,24 +44,6 @@ export default function DashboardAdmin() {
       </header>
       <main>
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 bg-gradient-to-br from-sky-50 to-indigo-100 min-h-screen">
-          <div className="flex flex-wrap gap-4 mb-8">
-          <Link to="/pacientes" className="btn">
-            Ver pacientes
-          </Link>
-          <Link to="/turnos" className="btn">Gestionar turnos</Link>
-          <button onClick={() => setShowAddDoctor(true)} className="btn">
-            Agregar médico
-          </button>
-            <button onClick={() => setShowComplexity(true)} className="btn">
-              Gestionar complejidad
-            </button>
-            <button onClick={() => setShowSummary(true)} className="btn">
-              Resumen mensual
-            </button>
-            <Link to="/resumen/detalle" className="btn">
-              Resumen general
-            </Link>
-          </div>
 
           <h2 className="text-2xl font-semibold mb-4">Médicos activos</h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -162,21 +138,8 @@ export default function DashboardAdmin() {
       </main>
 
       {/* Modales */}
-      <Modal isOpen={showComplexity} onClose={() => setShowComplexity(false)}>
-        <EditComplexity />
-      </Modal>
-
-      <Modal isOpen={showSummary} onClose={() => setShowSummary(false)}>
-        <Summary />
-      </Modal>
-
-
       <Modal isOpen={detailDoctorId !== null} onClose={() => setDetailDoctorId(null)}>
         {detailDoctorId && <DoctorDetail doctorId={detailDoctorId} />}
-      </Modal>
-
-      <Modal isOpen={showAddDoctor} onClose={() => setShowAddDoctor(false)}>
-        <FormDoctor onFinish={() => setShowAddDoctor(false)} />
       </Modal>
 
       <Modal isOpen={editDoctorId !== null} onClose={() => setEditDoctorId(null)}>
