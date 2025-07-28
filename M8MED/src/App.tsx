@@ -6,6 +6,9 @@ import Pacientes from './pages/Pacientes'
 import AgregarPaciente from './pages/AgregarPaciente'
 import DoctorDetail from './pages/DoctorDetail'
 import NewSurgery from './pages/NewSurgery'
+import EditComplexity from './pages/EditComplexity'
+import Summary from './pages/Summary'
+import GeneralSummary from './pages/GeneralSummary'
 import ProtectedRoute from './routes/ProtectedRoute'
 
 export default function App() {
@@ -53,6 +56,30 @@ export default function App() {
           element={
             <ProtectedRoute rolPermitido="admin">
               <NewSurgery />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/complejidad"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <EditComplexity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/resumen"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <Summary />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/resumen/detalle"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <GeneralSummary />
             </ProtectedRoute>
           }
         />

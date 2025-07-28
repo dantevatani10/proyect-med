@@ -8,7 +8,6 @@ export default function DoctorDetail() {
   // Obtenemos las referencias originales de doctores y cirugías
   const doctores = useM8Store((state) => state.doctores)
   const cirugias = useM8Store((state) => state.cirugias)
-  const complejidadValores = useM8Store((state) => state.complejidadValores)
   const doctor = doctores.find((d) => d.id === id)
 
   // Mapeamos IDs de doctores a nombres usando useMemo
@@ -43,11 +42,10 @@ export default function DoctorDetail() {
     )
   })
 
-  // Calcula el monto asignado a este médico para cada cirugía
+  // Calcula el monto asignado a este médico para cada cirugía usando valorBase
   const obtenerMonto = (c: Surgery) => {
-    const valorBase = complejidadValores[c.complejidad] ?? 0
     const partes = 1 + c.ayudantes.length
-    return valorBase / partes
+    return c.valorBase / partes
   }
 
   const meses = [
