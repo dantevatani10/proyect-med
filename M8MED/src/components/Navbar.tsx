@@ -2,7 +2,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useUserStore } from '../store/useUserStore'
 
 export default function Navbar() {
-  const { user, logout } = useUserStore((state) => ({ user: state.user, logout: state.logout }))
+  // Recuperamos cada valor por separado para no crear objetos nuevos en cada render
+  const user = useUserStore((state) => state.user)
+  const logout = useUserStore((state) => state.logout)
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -18,7 +20,8 @@ export default function Navbar() {
       {user && (
         <div className="flex items-center space-x-4">
           <span className="text-gray-700">
-            {user.email} (<span className="font-medium capitalize">{user.rol}</span>)
+            {user.email} (
+            <span className="font-medium capitalize">{user.rol}</span>)
           </span>
           {user.rol === 'admin' && (
             <Link to="/pacientes" className="text-blue-600 hover:underline">

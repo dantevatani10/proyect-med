@@ -4,17 +4,22 @@ import { useUserStore } from '../store/useUserStore'
 
 export default function Login() {
   const [email, setEmail] = useState('')
-  const [rol, setRol] = useState<'admin' | 'medico'>('admin')
+  const [password, setPassword] = useState('')
   const setUser = useUserStore((state) => state.setUser)
   const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setUser({ email, rol }) // <-- CORREGIDO: Pasa el objeto { email, rol }
-    if (rol === 'admin') {
+
+    // Comprobamos credenciales fijas
+    if (email === 'admin@test.com' && password === '1234') {
+      setUser({ email, rol: 'admin' })
       navigate('/dashboard-admin')
-    } else {
+    } else if (email === 'medico@test.com' && password === '1234') {
+      setUser({ email, rol: 'medico' })
       navigate('/dashboard-medico')
+    } else {
+      alert('Credenciales incorrectas')
     }
   }
 
@@ -35,15 +40,14 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Rol</label>
-            <select
-              value={rol}
-              onChange={(e) => setRol(e.target.value as 'admin' | 'medico')}
+            <label className="block text-sm font-medium">Contraseña</label>
+            <input
+              type="password"
               className="input w-full"
-            >
-              <option value="admin">Admin</option>
-              <option value="medico">Médico</option>
-            </select>
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
           <button type="submit" className="btn w-full">
