@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Navbar from '../components/Navbar'
 import Modal from '../components/Modal'
 import FormTurno from '../components/FormTurno'
@@ -11,6 +11,22 @@ export default function Turnos() {
   const eliminarTurno = useTurnoStore((s) => s.eliminarTurno)
   const pacientes = usePacienteStore((s) => s.pacientes)
   const doctores = useM8Store((s) => s.doctores)
+
+  const pacienteMap = useMemo(() => {
+    const map: Record<string, string> = {}
+    pacientes.forEach((p) => {
+      map[p.id] = `${p.nombre} ${p.apellido}`
+    })
+    return map
+  }, [pacientes])
+
+  const doctorMap = useMemo(() => {
+    const map: Record<string, string> = {}
+    doctores.forEach((d) => {
+      map[d.id] = `${d.nombre} ${d.apellido}`
+    })
+    return map
+  }, [doctores])
 
   const [addTurno, setAddTurno] = useState(false)
   const [editTurnoId, setEditTurnoId] = useState<string | null>(null)
@@ -42,38 +58,30 @@ export default function Turnos() {
                 </tr>
               </thead>
               <tbody>
-                {turnos.map((t) => {
-                  const pac = pacientes.find((p) => p.id === t.pacienteId)
-                  const doc = doctores.find((d) => d.id === t.doctorId)
-                  return (
-                    <tr key={t.id} className="border-b hover:bg-gray-50">
-                      <td className="px-4 py-2">{t.fecha}</td>
-                      <td className="px-4 py-2">{t.hora}</td>
-                      <td className="px-4 py-2 capitalize">{t.tipo}</td>
-                      <td className="px-4 py-2">
-                        {pac?.nombre} {pac?.apellido}
-                      </td>
-                      <td className="px-4 py-2">
-                        {doc?.nombre} {doc?.apellido}
-                      </td>
-                      <td className="px-4 py-2">{t.descripcion}</td>
-                      <td className="px-4 py-2 space-x-2">
-                        <button
-                          onClick={() => setEditTurnoId(t.id)}
-                          className="text-sky-600 hover:underline"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => eliminarTurno(t.id)}
-                          className="text-red-600 hover:underline"
-                        >
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })}
+              {turnos.map((t) => (
+                <tr key={t.id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-2">{t.fecha}</td>
+                  <td className="px-4 py-2">{t.hora}</td>
+                  <td className="px-4 py-2 capitalize">{t.tipo}</td>
+                  <td className="px-4 py-2">{pacienteMap[t.pacienteId]}</td>
+                  <td className="px-4 py-2">{doctorMap[t.doctorId]}</td>
+                  <td className="px-4 py-2">{t.descripcion}</td>
+                  <td className="px-4 py-2 space-x-2">
+                    <button
+                      onClick={() => setEditTurnoId(t.id)}
+                      className="text-sky-600 hover:underline"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => eliminarTurno(t.id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
               </tbody>
             </table>
           </div>

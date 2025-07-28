@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { usePacienteStore } from '../store/usePacienteStore'
 import { useM8Store } from '../store/useM8Store'
 import Navbar from '../components/Navbar'
@@ -7,6 +8,14 @@ export default function Pacientes() {
   const pacientes = usePacienteStore((state) => state.pacientes)
   const eliminarPaciente = usePacienteStore((s) => s.eliminarPaciente)
   const doctores = useM8Store((s) => s.doctores)
+
+  const doctorMap = useMemo(() => {
+    const map: Record<string, string> = {}
+    doctores.forEach((d) => {
+      map[d.id] = `${d.nombre} ${d.apellido}`
+    })
+    return map
+  }, [doctores])
 
   return (
     <>
@@ -40,10 +49,7 @@ export default function Pacientes() {
                   <td className="px-4 py-2">{paciente.telefono}</td>
                   <td className="px-4 py-2">{paciente.email}</td>
                   <td className="px-4 py-2 capitalize">{paciente.genero}</td>
-                  <td className="px-4 py-2">
-                    {doctores.find((d) => d.id === paciente.doctorId)?.nombre}{' '}
-                    {doctores.find((d) => d.id === paciente.doctorId)?.apellido}
-                  </td>
+                  <td className="px-4 py-2">{doctorMap[paciente.doctorId]}</td>
                   <td className="px-4 py-2 space-x-2">
                     <Link
                       to={`/pacientes/editar/${paciente.id}`}

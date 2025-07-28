@@ -39,6 +39,14 @@ export default function DashboardMedico() {
     [pacientesAll, doctor.id]
   )
 
+  const pacienteMap = useMemo(() => {
+    const map: Record<string, string> = {}
+    pacientes.forEach((p) => {
+      map[p.id] = `${p.nombre} ${p.apellido}`
+    })
+    return map
+  }, [pacientes])
+
   const turnosDoctor = useMemo(
     () => turnosAll.filter((t) => t.doctorId === doctor.id),
     [turnosAll, doctor.id]
@@ -97,35 +105,31 @@ export default function DashboardMedico() {
             <p className="text-slate-600">No hay turnos registrados.</p>
           ) : (
             <ul className="space-y-2">
-              {turnosDoctor.map((t) => {
-                const pac = pacientes.find((p) => p.id === t.pacienteId)
-                return (
-                  <li
-                    key={t.id}
-                    className="bg-white rounded shadow p-2 flex justify-between items-center"
-                  >
-                    <span>
-                      {t.fecha} {t.hora} - {pac?.nombre} {pac?.apellido} (
-                      {t.tipo})
-                      {t.descripcion ? ` - ${t.descripcion}` : ''}
-                    </span>
-                    <div className="space-x-4">
-                      <button
-                        onClick={() => setEditTurnoId(t.id)}
-                        className="text-sky-600 hover:underline"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => eliminarTurno(t.id)}
-                        className="text-red-600 hover:underline"
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  </li>
-                )
-              })}
+              {turnosDoctor.map((t) => (
+                <li
+                  key={t.id}
+                  className="bg-white rounded shadow p-2 flex justify-between items-center"
+                >
+                  <span>
+                    {t.fecha} {t.hora} - {pacienteMap[t.pacienteId]} ({t.tipo})
+                    {t.descripcion ? ` - ${t.descripcion}` : ''}
+                  </span>
+                  <div className="space-x-4">
+                    <button
+                      onClick={() => setEditTurnoId(t.id)}
+                      className="text-sky-600 hover:underline"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => eliminarTurno(t.id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </li>
+              ))}
             </ul>
           )}
         </div>
