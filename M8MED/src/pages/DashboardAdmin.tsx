@@ -5,6 +5,7 @@ import { useM8Store } from '../store/useM8Store'
 import EditComplexity from './EditComplexity'
 import Summary from './Summary'
 import GeneralSummary from './GeneralSummary'
+import DoctorDetail from './DoctorDetail'
 
 export default function DashboardAdmin() {
   const doctores = useM8Store((state) => state.doctores)
@@ -15,6 +16,7 @@ export default function DashboardAdmin() {
   const [showComplexity, setShowComplexity] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
   const [showGeneral, setShowGeneral] = useState(false)
+  const [detailDoctorId, setDetailDoctorId] = useState<string | null>(null)
 
   const contarParticipacionesDelMes = (doctorId: string) => {
     const ahora = new Date()
@@ -68,12 +70,12 @@ export default function DashboardAdmin() {
                 <p className="text-sm text-slate-600">
                   Sueldo actual: ${doc.sueldo.toFixed(2)}
                 </p>
-                <Link
-                  to={`/medicos/${doc.id}`}
+                <button
+                  onClick={() => setDetailDoctorId(doc.id)}
                   className="text-sky-600 hover:underline mt-2 inline-block"
                 >
                   Ver detalle
-                </Link>
+                </button>
               </div>
             ))}
           </div>
@@ -91,6 +93,10 @@ export default function DashboardAdmin() {
 
       <Modal isOpen={showGeneral} onClose={() => setShowGeneral(false)}>
         <GeneralSummary />
+      </Modal>
+
+      <Modal isOpen={detailDoctorId !== null} onClose={() => setDetailDoctorId(null)}>
+        {detailDoctorId && <DoctorDetail doctorId={detailDoctorId} />}
       </Modal>
     </>
   )

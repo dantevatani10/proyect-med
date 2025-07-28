@@ -1,14 +1,16 @@
-import { useParams, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useM8Store } from '../store/useM8Store'
 import { useState, useMemo } from 'react'
 import type { Surgery } from '../store/useM8Store'
 
-export default function DoctorDetail() {
-  const { id } = useParams<{ id: string }>()
+type Props = {
+  doctorId: string
+}
+export default function DoctorDetail({ doctorId }: Props) {
   // Obtenemos las referencias originales de doctores y cirugías
   const doctores = useM8Store((state) => state.doctores)
   const cirugias = useM8Store((state) => state.cirugias)
-  const doctor = doctores.find((d) => d.id === id)
+  const doctor = doctores.find((d) => d.id === doctorId)
 
   // Mapeamos IDs de doctores a nombres usando useMemo
   const doctorNames = useMemo(() => {
@@ -70,11 +72,15 @@ export default function DoctorDetail() {
   })
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">{doctor.nombre}</h1>
-      <p className="mb-2">Email: {doctor.email}</p>
-      <p className="mb-2">Especialidad: {doctor.especialidad}</p>
-      <p className="mb-4">Sueldo actual: ${doctor.sueldo.toFixed(2)}</p>
+    <div className="p-6 bg-white rounded-xl shadow max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4 text-slate-800">{doctor.nombre}</h1>
+      <p className="mb-2 text-sm text-slate-600">Email: {doctor.email}</p>
+      <p className="mb-2 text-sm text-slate-600">
+        Especialidad: {doctor.especialidad}
+      </p>
+      <p className="mb-4 text-sm text-slate-600">
+        Sueldo actual: ${doctor.sueldo.toFixed(2)}
+      </p>
 
       {/* Selectores de mes y año */}
       <div className="flex flex-wrap gap-4 mb-4">
@@ -124,37 +130,48 @@ export default function DoctorDetail() {
             </tr>
           </thead>
           <tbody>
-            {cirugiasDelMedico.map((c) => (
-              <tr key={c.id} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2">{c.fecha}</td>
-                <td className="px-4 py-2">{c.hora}</td>
-                <td className="px-4 py-2">
-                  {c.paciente.nombre} ({c.paciente.dni})
-                </td>
-                <td className="px-4 py-2">{c.diagnostico}</td>
-                <td className="px-4 py-2">{c.tipo}</td>
-                <td className="px-4 py-2 text-center">{c.complejidad}</td>
-                <td className="px-4 py-2">
-                  {c.ayudantes
-                    .map((aid) => doctorNames[aid] ?? aid)
-                    .join(', ')}
-                </td>
-                <td className="px-4 py-2">
-                  ${obtenerMonto(c).toFixed(2)}
-                </td>
-                <td className="px-4 py-2">
-                  {c.imagen ? (
-                    <img
-                      src={c.imagen}
-                      alt="Parte quirúrgico"
-                      className="h-8"
-                    />
-                  ) : (
-                    '—'
-                  )}
+            {cirugiasDelMedico.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={9}
+                  className="px-4 py-8 text-center text-slate-500"
+                >
+                  No hay cirugías registradas en este periodo
                 </td>
               </tr>
-            ))}
+            ) : (
+              cirugiasDelMedico.map((c) => (
+                <tr key={c.id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-2">{c.fecha}</td>
+                  <td className="px-4 py-2">{c.hora}</td>
+                  <td className="px-4 py-2">
+                    {c.paciente.nombre} ({c.paciente.dni})
+                  </td>
+                  <td className="px-4 py-2">{c.diagnostico}</td>
+                  <td className="px-4 py-2">{c.tipo}</td>
+                  <td className="px-4 py-2 text-center">{c.complejidad}</td>
+                  <td className="px-4 py-2">
+                    {c.ayudantes
+                      .map((aid) => doctorNames[aid] ?? aid)
+                      .join(', ')}
+                  </td>
+                  <td className="px-4 py-2">
+                    ${obtenerMonto(c).toFixed(2)}
+                  </td>
+                  <td className="px-4 py-2">
+                    {c.imagen ? (
+                      <img
+                        src={c.imagen}
+                        alt="Parte quirúrgico"
+                        className="h-8"
+                      />
+                    ) : (
+                      '—'
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
