@@ -2,10 +2,13 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { useUserStore } from '../store/useUserStore'
+import { useM8Store } from '../store/useM8Store'
 
 export default function PerfilUsuario() {
   const user = useUserStore((s) => s.user)
   const updateUser = useUserStore((s) => s.updateUser)
+  const editarDoctor = useM8Store((s) => s.editarDoctor)
+  const doctores = useM8Store((s) => s.doctores)
   const navigate = useNavigate()
 
   const [form, setForm] = useState({
@@ -26,6 +29,19 @@ export default function PerfilUsuario() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     updateUser(form)
+    if (user.rol === 'medico') {
+      const doctor = doctores.find((d) => d.id === user.id)
+      if (doctor) {
+        editarDoctor(doctor.id, {
+          ...doctor,
+          nombre: form.nombre,
+          apellido: form.apellido,
+          email: form.email,
+          password: form.password,
+          foto: form.foto,
+        })
+      }
+    }
     navigate(user.rol === 'admin' ? '/dashboard-admin' : '/dashboard-medico')
   }
 

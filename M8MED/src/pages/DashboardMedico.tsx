@@ -10,10 +10,10 @@ export default function DashboardMedico() {
   const doctores = useM8Store((s) => s.doctores)
   const cirugias = useM8Store((s) => s.cirugias)
 
-  // Buscar el médico según el email del usuario. Si no existe, usar el primero.
+  // Buscar el médico según el id del usuario. Si no existe, usar el primero.
   const doctor = useMemo(() => {
     if (!user) return doctores[0]
-    return doctores.find((d) => d.email === user.email) ?? doctores[0]
+    return doctores.find((d) => d.id === user.id) ?? doctores[0]
   }, [user, doctores])
 
   // Cirugías donde participa el médico

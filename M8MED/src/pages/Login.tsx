@@ -1,19 +1,22 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../store/useUserStore'
+import { useM8Store } from '../store/useM8Store'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const setUser = useUserStore((state) => state.setUser)
+  const doctores = useM8Store((s) => s.doctores)
   const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Comprobamos credenciales fijas
+    // Admin fijo
     if (email === 'admin@test.com' && password === '1234') {
       setUser({
+        id: 'admin',
         email,
         rol: 'admin',
         nombre: 'Admin',
@@ -22,14 +25,22 @@ export default function Login() {
         foto: 'https://placehold.co/64',
       })
       navigate('/dashboard-admin')
-    } else if (email === 'medico@test.com' && password === '1234') {
+      return
+    }
+
+    // Buscar médico con esas credenciales
+    const doctor = doctores.find(
+      (d) => d.email === email && d.password === password
+    )
+    if (doctor) {
       setUser({
-        email,
+        id: doctor.id,
+        email: doctor.email,
         rol: 'medico',
-        nombre: 'Juan',
-        apellido: 'Pérez',
-        password,
-        foto: 'https://placehold.co/64',
+        nombre: doctor.nombre,
+        apellido: doctor.apellido,
+        password: doctor.password,
+        foto: doctor.foto,
       })
       navigate('/dashboard-medico')
     } else {

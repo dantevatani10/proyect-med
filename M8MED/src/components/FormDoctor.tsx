@@ -14,6 +14,8 @@ export default function FormDoctor({ onFinish, doctor }: Props) {
     nombre: doctor?.nombre ?? '',
     apellido: doctor?.apellido ?? '',
     email: doctor?.email ?? '',
+    password: doctor?.password ?? '',
+    foto: doctor?.foto ?? '',
     telefono: doctor?.telefono ?? '',
     matricula: doctor?.matricula ?? '',
     especialidad: doctor?.especialidad ?? '',
@@ -66,6 +68,22 @@ export default function FormDoctor({ onFinish, doctor }: Props) {
           onChange={handleChange}
           className="input"
           required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Contraseña"
+          value={form.password}
+          onChange={handleChange}
+          className="input"
+          required
+        />
+        <input
+          name="foto"
+          placeholder="URL Foto"
+          value={form.foto}
+          onChange={handleChange}
+          className="input"
         />
         <input
           name="telefono"

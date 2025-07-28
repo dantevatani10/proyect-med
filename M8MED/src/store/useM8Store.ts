@@ -7,6 +7,8 @@ export type Doctor = {
   nombre: string
   apellido: string
   email: string
+  password: string
+  foto: string
   telefono: string
   matricula: string
   especialidad: string
@@ -56,6 +58,8 @@ export const useM8Store = create<M8Store>()(
           nombre: 'Juan',
           apellido: 'Pérez',
           email: 'juan.perez@hospital.com',
+          password: '1234',
+          foto: 'https://placehold.co/64',
           telefono: '123456789',
           matricula: 'MP1001',
           especialidad: 'Cardiología',
@@ -67,6 +71,8 @@ export const useM8Store = create<M8Store>()(
           nombre: 'Ana',
           apellido: 'Gómez',
           email: 'ana.gomez@hospital.com',
+          password: '1234',
+          foto: 'https://placehold.co/64',
           telefono: '987654321',
           matricula: 'MP1002',
           especialidad: 'Traumatología',

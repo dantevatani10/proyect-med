@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware'
 export type Rol = 'admin' | 'medico'
 
 type User = {
+  id?: string
   email: string
   rol: Rol
   nombre: string
