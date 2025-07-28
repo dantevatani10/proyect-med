@@ -16,7 +16,7 @@ export default function Navbar() {
     <nav className="bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-md fixed top-0 inset-x-0 z-10">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
         <Link to="/" className="text-xl font-bold">
-          M8MED
+          MEDM8
         </Link>
         {user && (
           <div className="flex items-center gap-6">
