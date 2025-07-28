@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import fotoLanding from "../assets/fotolanding.jpg";
 export default function Landing() {
   return (
     <div className="scroll-smooth">
@@ -49,7 +49,7 @@ export default function Landing() {
             </Link>
           </div>
           <img
-            src="https://images.unsplash.com/photo-1580281658629-3a2b9232cb29?auto=format&fit=crop&w=600&q=60"
+            src={fotoLanding}
             alt="App médica"
             className="md:w-1/2 rounded-xl shadow-lg"
           />
