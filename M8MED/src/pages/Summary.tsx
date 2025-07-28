@@ -67,7 +67,7 @@ export default function Summary() {
   const exportCSV = () => {
     let csv = 'Nombre,Email,Especialidad,Cirugías,Total\n'
     resumen.forEach((fila) => {
-      csv += `"${fila.doctor.nombre}","${fila.doctor.email}","${fila.doctor.especialidad}",${fila.count},${fila.total}\n`
+      csv += `"${fila.doctor.nombre} ${fila.doctor.apellido}","${fila.doctor.email}","${fila.doctor.especialidad}",${fila.count},${fila.total}\n`
     })
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)
@@ -140,7 +140,9 @@ export default function Summary() {
           <tbody>
             {resumen.map((fila) => (
               <tr key={fila.doctor.id} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2">{fila.doctor.nombre}</td>
+                <td className="px-4 py-2">
+                  {fila.doctor.nombre} {fila.doctor.apellido}
+                </td>
                 <td className="px-4 py-2">{fila.doctor.email}</td>
                 <td className="px-4 py-2">{fila.doctor.especialidad}</td>
                 <td className="px-4 py-2 text-center">{fila.count}</td>

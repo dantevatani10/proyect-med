@@ -159,7 +159,7 @@ export default function NewSurgery() {
             {Array.isArray(doctores) &&
               doctores.map((d) => (
                 <option key={d.id} value={d.id}>
-                  {d.nombre}
+                  {d.nombre} {d.apellido}
                 </option>
               ))}
           </select>
@@ -183,7 +183,7 @@ export default function NewSurgery() {
                 .filter((d) => d.id !== form.doctorId)
                 .map((d) => (
                   <option key={d.id} value={d.id}>
-                    {d.nombre}
+                    {d.nombre} {d.apellido}
                   </option>
                 ))}
           </select>

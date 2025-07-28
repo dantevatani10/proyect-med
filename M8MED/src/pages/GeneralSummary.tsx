@@ -16,7 +16,7 @@ export default function GeneralSummary() {
   const doctorNames = useMemo(() => {
     const map: Record<string, string> = {}
     doctores.forEach((d) => {
-      map[d.id] = d.nombre
+      map[d.id] = `${d.nombre} ${d.apellido}`
     })
     return map
   }, [doctores])
@@ -127,7 +127,7 @@ export default function GeneralSummary() {
             <option value="">Todos</option>
             {doctores.map((doc) => (
               <option key={doc.id} value={doc.id}>
-                {doc.nombre}
+                {doc.nombre} {doc.apellido}
               </option>
             ))}
           </select>

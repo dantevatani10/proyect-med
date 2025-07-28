@@ -5,7 +5,10 @@ import { v4 as uuidv4 } from 'uuid'
 export type Doctor = {
   id: string
   nombre: string
+  apellido: string
   email: string
+  telefono: string
+  matricula: string
   especialidad: string
   sueldo: number
   activo: boolean
@@ -33,6 +36,8 @@ type M8Store = {
   complejidadValores: ComplejidadValores
   agregarCirugia: (data: Omit<Surgery, 'id' | 'valorBase'>) => void
   editarComplejidad: (nivel: number, valor: number) => void
+  agregarDoctor: (data: Omit<Doctor, 'sueldo' | 'activo'>) => void
+  cambiarEstadoDoctor: (id: string, activo: boolean) => void
 }
 
 export const useM8Store = create<M8Store>()(
@@ -42,16 +47,22 @@ export const useM8Store = create<M8Store>()(
       doctores: [
         {
           id: 'doc1',
-          nombre: 'Dr. Juan Pérez',
+          nombre: 'Juan',
+          apellido: 'Pérez',
           email: 'juan.perez@hospital.com',
+          telefono: '123456789',
+          matricula: 'MP1001',
           especialidad: 'Cardiología',
           sueldo: 0,
           activo: true,
         },
         {
           id: 'doc2',
-          nombre: 'Dra. Ana Gómez',
+          nombre: 'Ana',
+          apellido: 'Gómez',
           email: 'ana.gomez@hospital.com',
+          telefono: '987654321',
+          matricula: 'MP1002',
           especialidad: 'Traumatología',
           sueldo: 0,
           activo: true,
@@ -97,6 +108,21 @@ export const useM8Store = create<M8Store>()(
       editarComplejidad: (nivel, valor) => {
         set((state) => ({
           complejidadValores: { ...state.complejidadValores, [nivel]: valor },
+        }))
+      },
+      agregarDoctor: (data) => {
+        set((state) => ({
+          doctores: [
+            ...state.doctores,
+            { ...data, sueldo: 0, activo: true },
+          ],
+        }))
+      },
+      cambiarEstadoDoctor: (id, activo) => {
+        set((state) => ({
+          doctores: state.doctores.map((d) =>
+            d.id === id ? { ...d, activo } : d
+          ),
         }))
       },
     }),

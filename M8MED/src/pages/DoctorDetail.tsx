@@ -16,7 +16,7 @@ export default function DoctorDetail({ doctorId }: Props) {
   const doctorNames = useMemo(() => {
     const map: Record<string, string> = {}
     doctores.forEach((d) => {
-      map[d.id] = d.nombre
+      map[d.id] = `${d.nombre} ${d.apellido}`
     })
     return map
   }, [doctores])
@@ -73,7 +73,9 @@ export default function DoctorDetail({ doctorId }: Props) {
 
   return (
     <div className="p-6 bg-white rounded-xl shadow max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-slate-800">{doctor.nombre}</h1>
+      <h1 className="text-2xl font-bold mb-4 text-slate-800">
+        {doctor.nombre} {doctor.apellido}
+      </h1>
       <p className="mb-2 text-sm text-slate-600">Email: {doctor.email}</p>
       <p className="mb-2 text-sm text-slate-600">
         Especialidad: {doctor.especialidad}

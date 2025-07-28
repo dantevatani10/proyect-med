@@ -6,16 +6,20 @@ import EditComplexity from './EditComplexity'
 import Summary from './Summary'
 import GeneralSummary from './GeneralSummary'
 import DoctorDetail from './DoctorDetail'
+import FormDoctor from '../components/FormDoctor'
 
 export default function DashboardAdmin() {
   const doctores = useM8Store((state) => state.doctores)
   const cirugias = useM8Store((state) => state.cirugias)
+  const cambiarEstadoDoctor = useM8Store((s) => s.cambiarEstadoDoctor)
   const doctoresActivos = doctores.filter((d) => d.activo)
+  const doctoresSuspendidos = doctores.filter((d) => !d.activo)
 
   // Estados para abrir/cerrar modales
   const [showComplexity, setShowComplexity] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
   const [showGeneral, setShowGeneral] = useState(false)
+  const [showAddDoctor, setShowAddDoctor] = useState(false)
   const [detailDoctorId, setDetailDoctorId] = useState<string | null>(null)
 
   const contarParticipacionesDelMes = (doctorId: string) => {
@@ -42,6 +46,9 @@ export default function DashboardAdmin() {
             <Link to="/pacientes" className="btn">
               Ver pacientes
             </Link>
+            <button onClick={() => setShowAddDoctor(true)} className="btn">
+              Agregar médico
+            </button>
             <button onClick={() => setShowComplexity(true)} className="btn">
               Gestionar complejidad
             </button>
@@ -58,7 +65,7 @@ export default function DashboardAdmin() {
             {doctoresActivos.map((doc) => (
               <div key={doc.id} className="card hover:shadow-md transition-shadow">
                 <h3 className="text-lg font-semibold text-slate-800">
-                  {doc.nombre}
+                  {doc.nombre} {doc.apellido}
                 </h3>
                 <p className="text-sm text-slate-600">{doc.email}</p>
                 <p className="text-sm text-slate-600">
@@ -76,9 +83,40 @@ export default function DashboardAdmin() {
                 >
                   Ver detalle
                 </button>
+                <button
+                  onClick={() => cambiarEstadoDoctor(doc.id, false)}
+                  className="text-red-600 hover:underline mt-2 ml-4 inline-block"
+                >
+                  Suspender
+                </button>
               </div>
             ))}
           </div>
+
+          {doctoresSuspendidos.length > 0 && (
+            <>
+              <h2 className="text-2xl font-semibold mt-10 mb-4">Médicos suspendidos</h2>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {doctoresSuspendidos.map((doc) => (
+                  <div key={doc.id} className="card hover:shadow-md transition-shadow">
+                    <h3 className="text-lg font-semibold text-slate-800">
+                      {doc.nombre} {doc.apellido}
+                    </h3>
+                    <p className="text-sm text-slate-600">{doc.email}</p>
+                    <p className="text-sm text-slate-600">
+                      Especialidad: {doc.especialidad}
+                    </p>
+                    <button
+                      onClick={() => cambiarEstadoDoctor(doc.id, true)}
+                      className="text-sky-600 hover:underline mt-2 inline-block"
+                    >
+                      Reactivar
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -97,6 +135,10 @@ export default function DashboardAdmin() {
 
       <Modal isOpen={detailDoctorId !== null} onClose={() => setDetailDoctorId(null)}>
         {detailDoctorId && <DoctorDetail doctorId={detailDoctorId} />}
+      </Modal>
+
+      <Modal isOpen={showAddDoctor} onClose={() => setShowAddDoctor(false)}>
+        <FormDoctor onDoctorAdded={() => setShowAddDoctor(false)} />
       </Modal>
     </>
   )
