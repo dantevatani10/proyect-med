@@ -11,9 +11,9 @@ export const meses = [
   { value: 10, label: 'Octubre' },
   { value: 11, label: 'Noviembre' },
   { value: 12, label: 'Diciembre' },
-]
+];
 
 export function ultimosAnios(cantidad = 5): number[] {
-  const actual = new Date().getFullYear()
-  return Array.from({ length: cantidad }, (_, i) => actual - i)
+  const actual = new Date().getFullYear();
+  return Array.from({ length: cantidad }, (_, i) => actual - i);
 }

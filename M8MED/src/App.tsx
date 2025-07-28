@@ -1,15 +1,19 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Landing from './pages/Landing'
-import Login from './pages/Login'
-import DashboardAdmin from './pages/DashboardAdmin'
-import DashboardMedico from './pages/DashboardMedico'
-import Pacientes from './pages/Pacientes'
-import AgregarPaciente from './pages/AgregarPaciente'
-import NewSurgery from './pages/NewSurgery'
-import EditComplexity from './pages/EditComplexity'
-import Summary from './pages/Summary'
-import GeneralSummary from './pages/GeneralSummary'
-import ProtectedRoute from './routes/ProtectedRoute'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import DashboardAdmin from './pages/DashboardAdmin';
+import DashboardMedico from './pages/DashboardMedico';
+import Pacientes from './pages/Pacientes';
+import AgregarPaciente from './pages/AgregarPaciente';
+import EditarPaciente from './pages/EditarPaciente';
+import NewSurgery from './pages/NewSurgery';
+import EditComplexity from './pages/EditComplexity';
+import Summary from './pages/Summary';
+import GeneralSummary from './pages/GeneralSummary';
+import AgregarDoctor from './pages/AgregarDoctor';
+import PerfilUsuario from './pages/PerfilUsuario';
+import ProtectedRoute from './routes/ProtectedRoute';
+import Turnos from './pages/Turnos';
 
 export default function App() {
   return (
@@ -41,6 +45,30 @@ export default function App() {
           element={
             <ProtectedRoute rolPermitido="admin">
               <AgregarPaciente />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agregar-medico"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <AgregarDoctor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/turnos"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <Turnos />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pacientes/editar/:id"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <EditarPaciente />
             </ProtectedRoute>
           }
         />
@@ -77,6 +105,15 @@ export default function App() {
           }
         />
 
+        <Route
+          path="/perfil"
+          element={
+            <ProtectedRoute rolPermitido={['admin', 'medico']}>
+              <PerfilUsuario />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Ruta protegida para médicos */}
         <Route
           path="/dashboard-medico"
@@ -88,5 +125,5 @@ export default function App() {
         />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }

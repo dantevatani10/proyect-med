@@ -1,75 +1,69 @@
-import { useM8Store } from '../store/useM8Store'
-import { useState, useMemo } from 'react'
-import { meses, ultimosAnios } from '../lib/date'
+import { useM8Store } from '../store/useM8Store';
+import { useState, useMemo } from 'react';
+import { meses, ultimosAnios } from '../lib/date';
 
 export default function Summary() {
   // Obtenemos doctores y cirugías desde la store
-  const doctores = useM8Store((state) => state.doctores)
-  const cirugias = useM8Store((state) => state.cirugias)
+  const doctores = useM8Store((state) => state.doctores);
+  const cirugias = useM8Store((state) => state.cirugias);
 
   // Estado para filtrar por mes y año
-  const ahora = new Date()
-  const [mesFiltro, setMesFiltro] = useState<number>(ahora.getMonth() + 1)
-  const [anioFiltro, setAnioFiltro] = useState<number>(ahora.getFullYear())
+  const ahora = new Date();
+  const [mesFiltro, setMesFiltro] = useState<number>(ahora.getMonth() + 1);
+  const [anioFiltro, setAnioFiltro] = useState<number>(ahora.getFullYear());
 
-  const anios = useMemo(() => ultimosAnios(), [])
+  const anios = useMemo(() => ultimosAnios(), []);
 
   // Filtramos todas las cirugías según mes y año seleccionados
   const cirugiasFiltradas = useMemo(() => {
     return cirugias.filter((c) => {
-      const fecha = new Date(`${c.fecha}T${c.hora}`)
+      const fecha = new Date(`${c.fecha}T${c.hora}`);
       return (
-        fecha.getMonth() + 1 === mesFiltro &&
-        fecha.getFullYear() === anioFiltro
-      )
-    })
-  }, [cirugias, mesFiltro, anioFiltro])
+        fecha.getMonth() + 1 === mesFiltro && fecha.getFullYear() === anioFiltro
+      );
+    });
+  }, [cirugias, mesFiltro, anioFiltro]);
 
   // Contador global de cirugías en el mes seleccionado
-  const totalCirugias = cirugiasFiltradas.length
+  const totalCirugias = cirugiasFiltradas.length;
 
   // Calculamos el resumen por médico (participa como cirujano principal o ayudante)
   const resumen = useMemo(() => {
     return doctores.map((doc) => {
       const cirugiasDoc = cirugiasFiltradas.filter(
-        (c) => c.doctorId === doc.id || c.ayudantes.includes(doc.id)
-      )
+        (c) => c.doctorId === doc.id || c.ayudantes.includes(doc.id),
+      );
       const total = cirugiasDoc.reduce((sum, c) => {
-        const partes = 1 + c.ayudantes.length
-        return sum + c.valorBase / partes
-      }, 0)
+        const partes = 1 + c.ayudantes.length;
+        return sum + c.valorBase / partes;
+      }, 0);
       return {
         doctor: doc,
         count: cirugiasDoc.length,
         total,
-      }
-    })
-  }, [doctores, cirugiasFiltradas])
+      };
+    });
+  }, [doctores, cirugiasFiltradas]);
 
   // Exportar a CSV
   const exportCSV = () => {
-    let csv = 'Nombre,Email,Especialidad,Cirugías,Total\n'
+    let csv = 'Nombre,Email,Especialidad,Cirugías,Total\n';
     resumen.forEach((fila) => {
-      csv += `"${fila.doctor.nombre} ${fila.doctor.apellido}","${fila.doctor.email}","${fila.doctor.especialidad}",${fila.count},${fila.total}\n`
-    })
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute(
-      'download',
-      `resumen_${mesFiltro}_${anioFiltro}.csv`
-    )
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+      csv += `"${fila.doctor.nombre} ${fila.doctor.apellido}","${fila.doctor.email}","${fila.doctor.especialidad}",${fila.count},${fila.total}\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `resumen_${mesFiltro}_${anioFiltro}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">
-        Resumen mensual de cirugías
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Resumen mensual de cirugías</h1>
 
       {/* Selectores de mes y año */}
       <div className="flex flex-wrap gap-4 mb-4">
@@ -129,9 +123,7 @@ export default function Summary() {
                 <td className="px-4 py-2">{fila.doctor.email}</td>
                 <td className="px-4 py-2">{fila.doctor.especialidad}</td>
                 <td className="px-4 py-2 text-center">{fila.count}</td>
-                <td className="px-4 py-2">
-                  ${fila.total.toFixed(2)}
-                </td>
+                <td className="px-4 py-2">${fila.total.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -145,5 +137,5 @@ export default function Summary() {
         Exportar CSV
       </button>
     </div>
-  )
+  );
 }

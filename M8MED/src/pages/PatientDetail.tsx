@@ -1,23 +1,23 @@
-import { usePacienteStore } from '../store/usePacienteStore'
-import { useState } from 'react'
+import { usePacienteStore } from '../store/usePacienteStore';
+import { useState } from 'react';
 
 type Props = {
-  pacienteId: string
-}
+  pacienteId: string;
+};
 
 export default function PatientDetail({ pacienteId }: Props) {
   const paciente = usePacienteStore((s) =>
-    s.pacientes.find((p) => p.id === pacienteId)
-  )
-  const [receta, setReceta] = useState('')
-  const [recordatorio, setRecordatorio] = useState('')
+    s.pacientes.find((p) => p.id === pacienteId),
+  );
+  const [receta, setReceta] = useState('');
+  const [recordatorio, setRecordatorio] = useState('');
 
   if (!paciente) {
     return (
       <div className="p-6">
         <p>Paciente no encontrado.</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -51,8 +51,8 @@ export default function PatientDetail({ pacienteId }: Props) {
           />
           <button
             onClick={() => {
-              alert('Receta enviada')
-              setReceta('')
+              alert('Receta enviada');
+              setReceta('');
             }}
             className="btn mt-2"
           >
@@ -68,8 +68,8 @@ export default function PatientDetail({ pacienteId }: Props) {
           />
           <button
             onClick={() => {
-              alert('Recordatorio enviado')
-              setRecordatorio('')
+              alert('Recordatorio enviado');
+              setRecordatorio('');
             }}
             className="btn mt-2"
           >
@@ -78,5 +78,5 @@ export default function PatientDetail({ pacienteId }: Props) {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import FormPaciente from '../components/FormPaciente'; // <-- REUTILIZA EL COMPONENTE
+import FormDoctor from '../components/FormDoctor';
 
-export default function AgregarPaciente() {
+export default function AgregarDoctor() {
   const navigate = useNavigate();
 
-  const handlePacienteGuardado = () => {
-    navigate('/pacientes'); // Navega a la lista de pacientes
+  const handleFinish = () => {
+    navigate('/dashboard-admin');
   };
 
   return (
@@ -15,7 +15,7 @@ export default function AgregarPaciente() {
       <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Agregar Paciente
+            Agregar Médico
           </h1>
         </div>
       </header>
@@ -23,13 +23,13 @@ export default function AgregarPaciente() {
         <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex justify-end mb-4">
             <button
-              onClick={() => navigate('/pacientes')}
+              onClick={() => navigate('/dashboard-admin')}
               className="text-blue-600 hover:underline"
             >
               ← Volver
             </button>
           </div>
-          <FormPaciente onFinish={handlePacienteGuardado} />
+          <FormDoctor onFinish={handleFinish} />
         </div>
       </main>
     </>
