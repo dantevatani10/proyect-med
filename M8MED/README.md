@@ -1,69 +1,93 @@
-# React + TypeScript + Vite
+MEDM8 es una aplicación web para gestionar cirugías, turnos y pacientes de una clínica u hospital. Está desarrollada con **React**, **TypeScript** y **Vite**, y almacena la información de forma local usando **Zustand**.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Características
 
-Currently, two official plugins are available:
+- Autenticación simulada para **administradores** y **médicos**.
+- Panel de administrador con gestión de médicos, pacientes, complejidad de cirugías y reportes generales.
+- Panel de médico con ingresos en tiempo real, calendario de turnos y lista de pacientes asociados.
+- Formularios validados con **Formik** y **Yup** para registrar o editar cirugías, turnos y pacientes.
+- Persistencia de datos en `localStorage` para mantener la información entre recargas.
+- Interfaz construida con **Tailwind CSS** y componentes de **Headless UI**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Instalación
 
-## Expanding the ESLint configuration
+Requiere Node.js 18 o superior.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Clona el repositorio y entra en la carpeta principal:
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+   ```bash
+   git clone <repo>
+   cd M8MED
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+2. Instala las dependencias:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+   ```bash
+   npm install
+   ```
+
+3. Arranca el entorno de desarrollo:
+
+   ```bash
+   npm run dev
+   ```
+
+   La aplicación estará disponible en `http://localhost:5173`.
+
+4. Para crear una build de producción ejecuta:
+
+   ```bash
+   npm run build
+   ```
+
+   Y para previsualizar el resultado:
+
+   ```bash
+   npm run preview
+   ```
+
+## Scripts disponibles
+
+- `npm run dev` inicia la aplicación en modo desarrollo.
+- `npm run lint` ejecuta ESLint sobre todo el proyecto.
+- `npm run build` compila la versión de producción.
+- `npm run preview` sirve la aplicación ya compilada.
+
+## Estructura del proyecto
+
+```
+M8MED/
+├── public/            # Archivos estáticos
+├── src/
+│   ├── components/    # Componentes reutilizables (Navbar, Modal, etc.)
+│   ├── pages/         # Vistas principales de la aplicación
+│   ├── store/         # Stores de Zustand para manejar el estado
+│   ├── types/         # Definiciones TypeScript compartidas
+│   └── lib/           # Funciones auxiliares
+├── index.html         # Punto de entrada
+├── package.json       # Dependencias y scripts
+└── tailwind.config.js # Configuración de estilos
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Usuarios de ejemplo
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+El proyecto incluye un usuario administrador y varios médicos de prueba:
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **Administrador**
+  - Email: `admin@test.com`
+  - Contraseña: `1234`
+- **Médicos** (revisar `src/store/useM8Store.ts` para ver las credenciales)
+
+## Contribución
+
+Este repositorio se utiliza como base para futuras integraciones de backend. Los datos se almacenan en el navegador. Si deseas restablecer los montos o registros, limpia la entrada `m8med-store` desde las herramientas de desarrollo del navegador (pestaña "Aplicación" → Almacenamiento → Limpiar).
+
+Para contribuir:
+
+1. Crea una rama a partir de `main`.
+2. Realiza tus cambios y asegúrate de que `npm run lint` y `npm run build` finalicen sin errores.
+3. Abre un Pull Request describiendo las modificaciones.
+
+## Licencia
+
+MIT
