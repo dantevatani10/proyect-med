@@ -5,6 +5,7 @@ import DashboardMedico from './pages/DashboardMedico'
 import Pacientes from './pages/Pacientes'
 import AgregarPaciente from './pages/AgregarPaciente'
 import DoctorDetail from './pages/DoctorDetail'
+import NewSurgery from './pages/NewSurgery'
 import ProtectedRoute from './routes/ProtectedRoute'
 
 export default function App() {
@@ -44,6 +45,14 @@ export default function App() {
           element={
             <ProtectedRoute rolPermitido="admin">
               <DoctorDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cirugias/nueva"
+          element={
+            <ProtectedRoute rolPermitido="admin">
+              <NewSurgery />
             </ProtectedRoute>
           }
         />
