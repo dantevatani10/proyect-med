@@ -1,6 +1,7 @@
 export type Paciente = {
   id: string
   nombre: string
+  apellido: string
   dni: string
   telefono: string
   genero: 'masculino' | 'femenino' | 'otro'

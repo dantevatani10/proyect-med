@@ -12,6 +12,7 @@ export default function FormPaciente({ onPacienteAgregado }: FormPacienteProps) 
 
   const [form, setForm] = useState<Omit<Paciente, 'id'>>({
     nombre: '',
+    apellido: '',
     dni: '',
     telefono: '',
     genero: 'masculino',
@@ -40,7 +41,22 @@ export default function FormPaciente({ onPacienteAgregado }: FormPacienteProps) 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow mt-6">
        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <input name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} className="input" required />
+          <input
+            name="nombre"
+            placeholder="Nombre"
+            value={form.nombre}
+            onChange={handleChange}
+            className="input"
+            required
+          />
+          <input
+            name="apellido"
+            placeholder="Apellido"
+            value={form.apellido}
+            onChange={handleChange}
+            className="input"
+            required
+          />
           <input name="dni" placeholder="DNI" value={form.dni} onChange={handleChange} className="input" required />
           <input name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} className="input" required />
           <input name="email" placeholder="Email" type="email" value={form.email} onChange={handleChange} className="input" required />
@@ -56,9 +72,7 @@ export default function FormPaciente({ onPacienteAgregado }: FormPacienteProps) 
 
         <textarea name="antecedentes" placeholder="Antecedentes (opcional)" value={form.antecedentes} onChange={e => handleChange(e)} className="input w-full h-24" />
 
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
-            Guardar paciente
-        </button>
+        <button type="submit" className="btn w-full">Guardar paciente</button>
     </form>
   )
 }

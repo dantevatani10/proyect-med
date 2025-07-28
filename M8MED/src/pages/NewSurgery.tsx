@@ -83,7 +83,7 @@ export default function NewSurgery() {
                 {Array.isArray(pacientes) &&
                   pacientes.map((p: Paciente) => (
                     <option key={p.id} value={p.id}>
-                      {p.nombre} - DNI: {p.dni}
+                      {p.nombre} {p.apellido} - DNI: {p.dni}
                     </option>
                   ))}
               </select>
